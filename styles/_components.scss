@@ -1,0 +1,53 @@
+//<a href="" class="cta-button">
+//  <div class="text-wrapper">
+//      <p class="medium-l">See what we do</p>
+//  </div>
+//  <div class="cta-icon">
+//      <svg width="37" height="23" viewBox="0 0 37 23" fill="none"
+//          xmlns="http://www.w3.org/2000/svg">
+//          <path
+//              d="M36.1261 12.5176C36.7119 11.9318 36.7119 10.982 36.1261 10.3962L26.5801 0.850307C25.9944 0.264521 25.0446 0.264521 24.4588 0.850307C23.873 1.43609 23.873 2.38584 24.4588 2.97163L32.9441 11.4569L24.4588 19.9422C23.873 20.528 23.873 21.4777 24.4588 22.0635C25.0446 22.6493 25.9944 22.6493 26.5801 22.0635L36.1261 12.5176ZM0.467773 12.9569L35.0654 12.9569V9.95691L0.467773 9.95691L0.467773 12.9569Z"
+//              fill="currentColor" />
+//      </svg>
+//      <svg width="37" height="23" viewBox="0 0 37 23" fill="none"
+//          xmlns="http://www.w3.org/2000/svg">
+//          <path
+//              d="M36.1261 12.5176C36.7119 11.9318 36.7119 10.982 36.1261 10.3962L26.5801 0.850307C25.9944 0.264521 25.0446 0.264521 24.4588 0.850307C23.873 1.43609 23.873 2.38584 24.4588 2.97163L32.9441 11.4569L24.4588 19.9422C23.873 20.528 23.873 21.4777 24.4588 22.0635C25.0446 22.6493 25.9944 22.6493 26.5801 22.0635L36.1261 12.5176ZM0.467773 12.9569L35.0654 12.9569V9.95691L0.467773 9.95691L0.467773 12.9569Z"
+//              fill="currentColor" />
+//      </svg>
+//  </div>
+//</a>
+
+.cta-button {
+    display: flex;
+    align-items: center;
+    gap: $sp32;
+
+    ._icon {
+        width: 37px;
+        height: 100%;
+        display: flex;
+        overflow: hidden;
+        gap: $sp24;
+
+        svg {
+            transform: translateX(calc(-100% - 24px));
+            flex: none;
+        }
+    }
+
+    &:hover {
+        >.text-wrapper {
+            transition: 0.3s;
+            color: #FFDC73;
+        }
+
+        >._icon {
+            svg {
+                transition: 0.5s;
+                color: #FFDC73;
+                transform: translateX(0%);
+            }
+        }
+    }
+}

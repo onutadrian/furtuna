@@ -1,0 +1,188 @@
+@import 'variables';
+@import 'animations';
+@import 'components';
+
+.text-wrapper {
+    background: none;
+}
+
+.text-wrapper-colored {
+    background-color: beige;
+    overflow: hidden;
+}
+
+.full-width-grid {
+    margin: 0 $sp48;
+    display: grid;
+    grid-template-columns: repeat(18, 1fr);
+    column-gap: 1.5rem;
+}
+
+header {
+    width: 100%;
+    position: absolute;
+    z-index: 100;
+    color: #ffffff;
+
+    ._content {
+        margin: $sp48 0 0 0;
+        display: flex;
+        justify-content: space-between;
+        grid-column: 2 / 18;
+
+        nav {
+            ul {
+                display: flex;
+                gap: $sp24;
+            }
+        }
+    }
+}
+
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background: black;
+
+    video {
+        position: absolute;
+        min-width: 100%;
+        min-height: 100%;
+        object-fit: cover;
+        opacity: 0.5;
+    }
+
+    .full-width-grid {
+        position: relative;
+        z-index: 10;
+        height: 100%;
+    }
+
+    ._content {
+        grid-column: 2 / 18;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        ._top {
+            width: 100%;
+            height: $sp32;
+        }
+
+        ._mid {
+            ._title {
+                color: #ffffff;
+                max-width: 61.25rem;
+
+                ._small-text {
+                    margin-bottom: $sp16;
+                    margin-left: $sp2;
+                }
+
+                ._highlight {
+                    position: relative;
+                }
+
+                ._highlight::before {
+                    content: '';
+                    position: absolute;
+                    bottom: -0.1em;
+                    height: .75em;
+                    width: 0%;
+                    margin-left: -0.5rem;
+                    background: linear-gradient(90deg, rgba(255, 191, 0, 1) 0%, rgba(255, 220, 115, 1) 100%);
+                    opacity: 0.5;
+                    transform: skew(-20deg);
+                    pointer-events: none;
+                    animation: hero-highlight-animation 1s .5s forwards;
+                }
+            }
+        }
+
+        ._bottom {
+            margin-bottom: $sp64;
+            color: #ffffff;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: end;
+
+            ._text {
+                max-width: 34.375rem;
+                border-left: 10px solid #ffffff;
+                padding-left: $sp24;
+            }
+        }
+    }
+}
+
+.projects-list {
+    width: 100%;
+    min-height: 100vh;
+    height: fit-content;
+    position: relative;
+
+    ._video-wrapper {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+
+        ._sticky-container {
+            position: sticky;
+            top: 0;
+            background: black;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+
+            video {
+                position: relative;
+                top: 50%;
+                left: 50%;
+                min-width: 100%;
+                min-height: 100%;
+                transform: translate(-50%, -50%);
+                object-fit: cover;
+                opacity: 0.5;
+            }
+        }
+    }
+
+    ._projects-wrapper {
+        position: relative;
+        z-index: 5;
+        grid-column: 2 / 18;
+        display: flex;
+        flex-direction: column;
+
+        ._project-item {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            color: #ffffff;
+
+            ._left {
+                ._tags {
+                    display: flex;
+                    gap: $sp8;
+                    margin-bottom: $sp24;
+
+                    ._tag {
+                        padding: $sp8;
+                        background: #ffffff;
+                        color: #000000;
+                        border-radius: 0.25rem;
+                    }
+                }
+            }
+
+            ._right {
+                
+            }
+        }
+    }
+}
+
