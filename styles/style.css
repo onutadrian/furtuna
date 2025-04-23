@@ -195,6 +195,21 @@
     width: 105%;
   }
 }
+@keyframes chat-typing-circle-animation {
+  0% {
+    scale: 1;
+    transform: translateY(0px);
+  }
+  20% {
+    scale: 0.8;
+    transform: translateY(-8px);
+    opacity: 0.8;
+  }
+  40% {
+    scale: 1;
+    transform: translateY(0px);
+  }
+}
 .cta-button {
   display: flex;
   align-items: center;
@@ -363,10 +378,17 @@ header ._content nav ul {
   flex-direction: column;
 }
 .projects-list ._projects-wrapper ._project-item {
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   color: #ffffff;
+}
+.projects-list ._projects-wrapper ._project-item ._left .gsapHover {
+  position: absolute;
+  height: 100px;
+  width: 100%;
+  z-index: 10;
 }
 .projects-list ._projects-wrapper ._project-item ._left ._tags {
   display: flex;
@@ -378,4 +400,82 @@ header ._content nav ul {
   background: #ffffff;
   color: #000000;
   border-radius: 0.25rem;
+  opacity: 0;
+}
+.projects-list ._projects-wrapper ._project-item ._left ._title {
+  margin-bottom: 15rem;
+}
+.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper {
+  opacity: 0;
+  display: flex;
+  gap: 1rem;
+}
+.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._left ._avatar {
+  width: 2rem;
+  margin-top: 0.25rem;
+}
+.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right {
+  max-width: 33.25rem;
+  color: #000000;
+  display: flex;
+  flex-direction: column;
+}
+.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right ._top-island {
+  background: #ffffff;
+  padding: 1rem 1rem 0px 1rem;
+  border-radius: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right ._top-island ._name {
+  margin-bottom: 0.5rem;
+}
+.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right ._top-island ._role {
+  color: #848484;
+  margin-bottom: 1.5rem;
+}
+.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right ._top-island ._text {
+  padding-bottom: 1.5rem;
+  width: 100%;
+}
+.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right ._mid-island {
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  height: -moz-fit-content;
+  height: fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin-bottom: 0.5rem;
+  display: none;
+}
+.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right ._bottom-island {
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  height: -moz-fit-content;
+  height: fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  display: none;
+}
+.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right ._typing {
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
+  margin-top: 1rem;
+}
+.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right ._typing ._circle {
+  background: #ffffff;
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 100rem;
+}
+.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right ._typing ._first-circle {
+  animation: chat-typing-circle-animation 1.6s infinite;
+}
+.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right ._typing ._second-circle {
+  animation: chat-typing-circle-animation 1.6s 0.4s infinite;
+}
+.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right ._typing ._third-circle {
+  animation: chat-typing-circle-animation 1.6s 0.8s infinite;
 }/*# sourceMappingURL=style.css.map */

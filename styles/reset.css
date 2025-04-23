@@ -55,10 +55,11 @@ h6 {
   overflow-wrap: break-word;
 }
 
-/* 9. Improve line wrapping */
+/* 9. Improve line wrapping 
 p {
   text-wrap: pretty;
 }
+*/
 
 h1,
 h2,

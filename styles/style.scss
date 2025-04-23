@@ -159,12 +159,21 @@ header {
         flex-direction: column;
 
         ._project-item {
+            position: relative;
             display: flex;
             flex-direction: row;
             justify-content: space-between;
             color: #ffffff;
 
             ._left {
+
+                .gsapHover {
+                    position: absolute;
+                    height: 100px;
+                    width: 100%;
+                    z-index: 10;
+                }
+                
                 ._tags {
                     display: flex;
                     gap: $sp8;
@@ -175,14 +184,102 @@ header {
                         background: #ffffff;
                         color: #000000;
                         border-radius: 0.25rem;
+                        opacity: 0;
                     }
+                }
+
+                ._title {
+                    margin-bottom: $sp240;
                 }
             }
 
             ._right {
-                
+                ._chat-wrapper {
+                    opacity: 0;
+                    display: flex;
+                    gap: $sp16;
+
+                    ._left {
+                        ._avatar {
+                            width: 2rem;
+                            margin-top: $sp4;
+                        }
+                    }
+
+                    ._right {
+                        max-width: 33.25rem;
+                        color: #000000;
+                        display: flex;
+                        flex-direction: column;
+
+                        ._top-island {
+                            background: #ffffff;
+                            padding: $sp16 $sp16 0px $sp16;
+                            border-radius: 0.25rem;
+                            margin-bottom: $sp8;
+
+                            ._name {
+                                margin-bottom: $sp8;
+                            }
+
+                            ._role {
+                                color: #848484;
+                                margin-bottom: $sp24;
+                            }
+
+                            ._text {
+                                padding-bottom: $sp24;
+                                width: 100%;
+                            }
+                        }
+
+                        ._mid-island {
+                            background: #ffffff;
+                            padding: $sp16;
+                            border-radius: 0.25rem;
+                            height: fit-content;
+                            width: fit-content;
+                            margin-bottom: $sp8;
+                            display: none;
+                        }
+
+                        ._bottom-island {
+                            background: #ffffff;
+                            padding: $sp16;
+                            border-radius: 0.25rem;
+                            height: fit-content;
+                            width: fit-content;
+                            display: none;
+                        }
+
+                        ._typing {
+                            display: flex;
+                            flex-direction: row;
+                            gap: $sp4;
+                            margin-top: $sp16;
+
+                            ._circle {
+                                background: #ffffff;
+                                width: 0.875rem;
+                                height: 0.875rem;
+                                border-radius: 100rem;
+                            }
+
+                            ._first-circle {
+                                animation: chat-typing-circle-animation 1.6s infinite;
+                            }
+
+                            ._second-circle {
+                                animation: chat-typing-circle-animation 1.6s .4s infinite;
+                            }
+
+                            ._third-circle {
+                                animation: chat-typing-circle-animation 1.6s .8s infinite;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 }
-
