@@ -164,7 +164,6 @@ header {
             flex-direction: row;
             justify-content: space-between;
             color: #ffffff;
-            cursor: pointer;
 
             ._left {
 
@@ -173,6 +172,7 @@ header {
                     height: 100px;
                     width: 100%;
                     z-index: 10;
+                    cursor: pointer;
                 }
                 
                 ._tags {
@@ -204,53 +204,33 @@ header {
                     ._left {
                         ._avatar {
                             width: 2rem;
-                            margin-top: $sp4;
                         }
                     }
 
                     ._right {
-                        max-width: 33.25rem;
+                        width: 33.25rem;
                         color: #000000;
                         display: flex;
                         flex-direction: column;
 
-                        ._top-island {
-                            background: #ffffff;
-                            padding: $sp16 $sp16 0px $sp16;
-                            border-radius: 0.25rem;
+                        
+                        ._name {
                             margin-bottom: $sp8;
-
-                            ._name {
-                                margin-bottom: $sp8;
-                            }
-
-                            ._role {
-                                color: #848484;
-                                margin-bottom: $sp24;
-                            }
-
-                            ._text {
-                                padding-bottom: $sp24;
-                                width: 100%;
-                            }
+                            color: #ffffff;
                         }
 
-                        ._mid-island {
+                        ._role {
+                            color: #848484;
+                            margin-bottom: $sp16;
+                        }
+
+                        ._chat-island {
                             background: #ffffff;
                             padding: $sp16;
                             border-radius: 0.25rem;
                             height: fit-content;
                             width: fit-content;
                             margin-bottom: $sp8;
-                            display: none;
-                        }
-
-                        ._bottom-island {
-                            background: #ffffff;
-                            padding: $sp16;
-                            border-radius: 0.25rem;
-                            height: fit-content;
-                            width: fit-content;
                             display: none;
                         }
 

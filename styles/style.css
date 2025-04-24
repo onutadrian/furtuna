@@ -383,13 +383,13 @@ header ._content nav ul {
   flex-direction: row;
   justify-content: space-between;
   color: #ffffff;
-  cursor: pointer;
 }
 .projects-list ._projects-wrapper ._project-item ._left .gsapHover {
   position: absolute;
   height: 100px;
   width: 100%;
   z-index: 10;
+  cursor: pointer;
 }
 .projects-list ._projects-wrapper ._project-item ._left ._tags {
   display: flex;
@@ -414,32 +414,22 @@ header ._content nav ul {
 }
 .projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._left ._avatar {
   width: 2rem;
-  margin-top: 0.25rem;
 }
 .projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right {
-  max-width: 33.25rem;
+  width: 33.25rem;
   color: #000000;
   display: flex;
   flex-direction: column;
 }
-.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right ._top-island {
-  background: #ffffff;
-  padding: 1rem 1rem 0px 1rem;
-  border-radius: 0.25rem;
+.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right ._name {
   margin-bottom: 0.5rem;
+  color: #ffffff;
 }
-.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right ._top-island ._name {
-  margin-bottom: 0.5rem;
-}
-.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right ._top-island ._role {
+.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right ._role {
   color: #848484;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
-.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right ._top-island ._text {
-  padding-bottom: 1.5rem;
-  width: 100%;
-}
-.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right ._mid-island {
+.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right ._chat-island {
   background: #ffffff;
   padding: 1rem;
   border-radius: 0.25rem;
@@ -448,16 +438,6 @@ header ._content nav ul {
   width: -moz-fit-content;
   width: fit-content;
   margin-bottom: 0.5rem;
-  display: none;
-}
-.projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right ._bottom-island {
-  background: #ffffff;
-  padding: 1rem;
-  border-radius: 0.25rem;
-  height: -moz-fit-content;
-  height: fit-content;
-  width: -moz-fit-content;
-  width: fit-content;
   display: none;
 }
 .projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right ._typing {
