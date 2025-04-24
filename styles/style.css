@@ -360,7 +360,7 @@ header ._content nav ul {
   overflow: hidden;
 }
 .projects-list ._video-wrapper ._sticky-container video {
-  position: relative;
+  position: absolute;
   top: 50%;
   left: 50%;
   min-width: 100%;
@@ -368,7 +368,7 @@ header ._content nav ul {
   transform: translate(-50%, -50%);
   -o-object-fit: cover;
      object-fit: cover;
-  opacity: 0.5;
+  opacity: 0;
 }
 .projects-list ._projects-wrapper {
   position: relative;
@@ -383,6 +383,7 @@ header ._content nav ul {
   flex-direction: row;
   justify-content: space-between;
   color: #ffffff;
+  cursor: pointer;
 }
 .projects-list ._projects-wrapper ._project-item ._left .gsapHover {
   position: absolute;
@@ -404,6 +405,7 @@ header ._content nav ul {
 }
 .projects-list ._projects-wrapper ._project-item ._left ._title {
   margin-bottom: 15rem;
+  opacity: 0.3;
 }
 .projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper {
   opacity: 0;

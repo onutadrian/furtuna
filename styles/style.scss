@@ -139,14 +139,14 @@ header {
             overflow: hidden;
 
             video {
-                position: relative;
+                position: absolute;
                 top: 50%;
                 left: 50%;
                 min-width: 100%;
                 min-height: 100%;
                 transform: translate(-50%, -50%);
                 object-fit: cover;
-                opacity: 0.5;
+                opacity: 0;
             }
         }
     }
@@ -164,6 +164,7 @@ header {
             flex-direction: row;
             justify-content: space-between;
             color: #ffffff;
+            cursor: pointer;
 
             ._left {
 
@@ -190,6 +191,7 @@ header {
 
                 ._title {
                     margin-bottom: $sp240;
+                    opacity: 0.3;
                 }
             }
 
