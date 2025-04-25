@@ -345,6 +345,32 @@ header ._content nav ul {
   height: fit-content;
   position: relative;
 }
+.projects-list ._view-project-blob {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 230px;
+  height: 230px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 500px;
+  transform-origin: 50% 50%;
+  transform: translate(-50%, -50%);
+  will-change: width, height, transform, border;
+  z-index: 999;
+  pointer-events: none;
+  background: white;
+}
+.projects-list ._view-project-blob ._content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
 .projects-list ._video-wrapper {
   position: absolute;
   width: 100%;
@@ -371,6 +397,7 @@ header ._content nav ul {
   opacity: 0;
 }
 .projects-list ._projects-wrapper {
+  padding: 50vh 0;
   position: relative;
   z-index: 5;
   grid-column: 2/18;
@@ -404,8 +431,11 @@ header ._content nav ul {
   opacity: 0;
 }
 .projects-list ._projects-wrapper ._project-item ._left ._title {
-  margin-bottom: 15rem;
+  margin-bottom: 7.5rem;
   opacity: 0.3;
+}
+.projects-list ._projects-wrapper ._project-item ._right {
+  height: 0;
 }
 .projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper {
   opacity: 0;

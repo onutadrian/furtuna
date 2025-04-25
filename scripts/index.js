@@ -1,38 +1,65 @@
 'use strict'
 
+const lenis = new Lenis({
+    autoRaf: true,
+});
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function homeProjectsList() {
-    let projectItem = document.getElementsByClassName(`_project-item`)
-    let lastProjectItem;
 
+    let viewProjectElement = document.getElementsByClassName(`_view-project-blob`)[0];
+    let viewProjectContent = viewProjectElement.getElementsByClassName(`_content`)[0];
 
-    for (let i = 0; i < projectItem.length; i++) {
+    gsap.set(viewProjectElement, {
+        transformOrigin: 'center center'
+    });
+    let blobState = {
+        active: 0
+    }; // is blob in gsapHover?
 
-        let mouseIsIn = false;
-        let videoId = projectItem[i].getAttribute(`video-id`)
-        let videoElement = document.getElementById(videoId)
+    let projectItems = document.getElementsByClassName(`_project-item`)
+    let lastProjectItem = `none`;
 
-        let projectTags = projectItem[i].getElementsByClassName(`_tag`)
-        let gsapHover = projectItem[i].getElementsByClassName(`gsapHover`)[0]
-        let projectTitle = projectItem[i].getElementsByClassName(`_title`)[0]
-        let chatWrapper = projectItem[i].getElementsByClassName(`_chat-wrapper`)[0]
+    for (let i = 0; i < projectItems.length; i++) {
 
-        projectItem[i].addEventListener(`mouseenter`, async () => {
-            if (mouseIsIn == false) {
-                mouseIsIn = true;
+        let currentVideoId = projectItems[i].getAttribute(`video-id`)
+        let currentVideoElement = document.getElementById(currentVideoId)
 
-                gsap.to(videoElement, {
+        let gsapHover = projectItems[i].getElementsByClassName(`gsapHover`)[0]
+
+        let currentProjectTags = projectItems[i].getElementsByClassName(`_tag`)
+        let currentProjectTitle = projectItems[i].getElementsByClassName(`_title`)[0]
+
+        let currentChatWrapper = projectItems[i].getElementsByClassName(`_chat-wrapper`)[0]
+        let currentChatAnimationStatus;
+
+        let currentChatMessageIslands = projectItems[i].getElementsByClassName(`_chat-island`)
+        let currentChatIslandAnimation;
+
+        let currentChatTypingIndicator = projectItems[i].getElementsByClassName(`_typing`)[0]
+        let currentChatTypingIndicatorAnimation;
+
+        gsapHover.addEventListener(`pointerenter`, async () => {
+
+            gsap.to(blobState, {
+                active: 1,
+                duration: 0.3
+            });
+
+            if (lastProjectItem != projectItems[i]) {
+
+                gsap.to(currentVideoElement, {
                     display: `block`,
                     autoAlpha: .5,
                     duration: 0.3
                 })
 
-                videoElement.play();
+                currentVideoElement.play();
 
-                gsap.fromTo(Array.from(projectTags), {
+                gsap.fromTo(Array.from(currentProjectTags), {
                     y: -10,
                     opacity: 0
                 }, {
@@ -42,53 +69,158 @@ function homeProjectsList() {
                     duration: 0.2
                 });
 
-                gsap.to(projectTitle, {
+                gsap.to(currentProjectTitle, {
                     autoAlpha: 1,
                     duration: 0.3
                 })
 
-                gsap.fromTo(chatWrapper, {
-                    x: -32,
+                gsap.fromTo(currentChatWrapper, {
+                    //x: -32,
                     opacity: 0
                 }, {
-                    x: 0,
+                    //x: 0,
                     opacity: 1,
                     duration: 0.3
                 });
+
+                currentChatAnimationStatus = currentChatWrapper.getAttribute(`animation-status`)
+
+                if (currentChatAnimationStatus == `none`) {
+
+                    currentChatWrapper.setAttribute(`animation-status`, `in-progress`)
+
+                    currentChatIslandAnimation = gsap.fromTo(currentChatMessageIslands, {
+                        display: `none`,
+                        autoAlpha: 0
+                    }, {
+                        display: `block`,
+                        autoAlpha: 1,
+                        delay: 0.5,
+                        stagger: 1,
+                        onComplete: () => {
+                            currentChatWrapper.setAttribute(`animation-status`, `done`)
+                        }
+                    });
+
+                    currentChatTypingIndicatorAnimation = gsap.to(currentChatTypingIndicator, {
+                        opacity: 0,
+                        delay: 2.5,
+                        duration: 0
+                    })
+
+                }
+
+                if (lastProjectItem != `none`) {
+
+                    let lastVideoId = lastProjectItem.getAttribute(`video-id`)
+                    let lastVideoElement = document.getElementById(lastVideoId)
+
+                    let lastProjectTags = lastProjectItem.getElementsByClassName(`_tag`)
+                    let lastProjectTitle = lastProjectItem.getElementsByClassName(`_title`)[0]
+
+                    let lastChatWrapper = lastProjectItem.getElementsByClassName(`_chat-wrapper`)[0]
+
+                    gsap.to(lastVideoElement, {
+                        display: `none`,
+                        autoAlpha: 0,
+                        duration: 0.3
+                    })
+
+                    lastVideoElement.pause();
+
+                    gsap.to(Array.from(lastProjectTags), {
+                        y: -10,
+                        stagger: 0.05,
+                        opacity: 0,
+                        duration: 0.2
+                    });
+
+                    gsap.to(lastProjectTitle, {
+                        autoAlpha: 0.3,
+                        duration: 0.3
+                    })
+
+                    gsap.to(lastChatWrapper, {
+                        //x: -32,
+                        opacity: 0,
+                        duration: 0.3
+                    });
+                }
             }
         })
 
-        projectItem[i].addEventListener(`mouseleave`, async () => {
-            mouseIsIn = false;
+        gsapHover.addEventListener(`pointerleave`, async () => {
+            lastProjectItem = projectItems[i];
 
-            gsap.to(videoElement, {
-                display: `none`,
-                autoAlpha: 0,
-                duration: 0.3
-            })
-
-            videoElement.pause();
-
-            gsap.to(Array.from(projectTags), {
-                y: -10,
-                stagger: 0.05,
-                opacity: 0,
-                duration: 0.2
+            gsap.to(blobState, {
+                active: 0,
+                duration: 0.3,
+                ease: 'power1.out'
             });
-
-            gsap.to(projectTitle, {
-                autoAlpha: 0.3,
-                duration: 0.3
-            })
-
-            gsap.to(chatWrapper, {
-                x: -32,
-                opacity: 0,
-                duration: 0.3
-            });
-
         })
     }
+
+    // View Project Blob Animation ---------------
+
+    function getAngle(dx, dy) {
+        return (Math.atan2(dy, dx) * 180) / Math.PI;
+    }
+
+    function getScale(dx, dy) {
+        let dist = Math.hypot(dx, dy);
+        return Math.min(dist / 1200, 0.35);
+    }
+
+    let pos = {
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2
+    };
+    let vel = {
+        x: 0,
+        y: 0
+    };
+
+    let set = {
+        x: gsap.quickSetter(viewProjectElement, "x", "px"),
+        y: gsap.quickSetter(viewProjectElement, "y", "px"),
+        width: gsap.quickSetter(viewProjectElement, "width", "px"),
+        r: gsap.quickSetter(viewProjectElement, "rotation", "deg"),
+        sx: gsap.quickSetter(viewProjectElement, "scaleX"),
+        sy: gsap.quickSetter(viewProjectElement, "scaleY"),
+        rt: gsap.quickSetter(viewProjectContent, "rotation", "deg")
+    };
+
+    function updateBlob() {
+        let rotation = getAngle(vel.x, vel.y);
+        let scale = getScale(vel.x, vel.y);
+
+        set.x(pos.x);
+        set.y(pos.y);
+        set.width(230 + scale * 150);
+        set.r(rotation);
+        set.sx((1 + scale) * blobState.active);
+        set.sy((1 - scale) * blobState.active);
+        set.rt(-rotation);
+    }
+
+    gsap.ticker.add(updateBlob);
+
+    window.addEventListener("mousemove", (e) => {
+        let x = e.clientX,
+            y = e.clientY;
+        gsap.to(pos, {
+            x,
+            y,
+            duration: 1,
+            ease: "expo.out",
+            onUpdate: () => {
+                vel.x = x - pos.x;
+                vel.y = y - pos.y;
+            }
+        });
+
+        updateBlob();
+    });
 }
 
 homeProjectsList()

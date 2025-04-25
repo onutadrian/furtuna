@@ -124,6 +124,35 @@ header {
     height: fit-content;
     position: relative;
 
+    ._view-project-blob {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 230px;
+        height: 230px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 500px;
+        transform-origin: 50% 50%;
+        transform: translate(-50%, -50%);
+        will-change: width, height, transform, border;
+        z-index: 999;
+        pointer-events: none;
+        background: white;
+
+        ._content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: $sp16;
+        }
+
+    }
+
     ._video-wrapper {
         position: absolute;
         width: 100%;
@@ -152,6 +181,7 @@ header {
     }
 
     ._projects-wrapper {
+        padding: 50vh 0;
         position: relative;
         z-index: 5;
         grid-column: 2 / 18;
@@ -174,7 +204,7 @@ header {
                     z-index: 10;
                     cursor: pointer;
                 }
-                
+
                 ._tags {
                     display: flex;
                     gap: $sp8;
@@ -190,12 +220,14 @@ header {
                 }
 
                 ._title {
-                    margin-bottom: $sp240;
+                    margin-bottom: $sp120;
                     opacity: 0.3;
                 }
             }
 
             ._right {
+                height: 0;
+
                 ._chat-wrapper {
                     opacity: 0;
                     display: flex;
@@ -213,7 +245,6 @@ header {
                         display: flex;
                         flex-direction: column;
 
-                        
                         ._name {
                             margin-bottom: $sp8;
                             color: #ffffff;
