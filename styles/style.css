@@ -490,4 +490,11 @@ header ._content nav ul {
 }
 .projects-list ._projects-wrapper ._project-item ._right ._chat-wrapper ._right ._typing ._third-circle {
   animation: chat-typing-circle-animation 1.6s 0.8s infinite;
+}
+
+.clients {
+  overflow: hidden;
+}
+.clients ._unicorn {
+  width: 100%;
 }/*# sourceMappingURL=style.css.map */
