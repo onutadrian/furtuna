@@ -256,7 +256,7 @@
 header {
   width: 100%;
   position: absolute;
-  z-index: 100;
+  z-index: 100000;
   color: #ffffff;
 }
 header ._content {
@@ -268,6 +268,46 @@ header ._content {
 header ._content nav ul {
   display: flex;
   gap: 1.5rem;
+}
+
+.video-transition-wrapper {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: black;
+  z-index: 100;
+  overflow: hidden;
+}
+.video-transition-wrapper video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.video-transition-wrapper ._video-wrapper {
+  position: relative;
+  background: black;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+.video-transition-wrapper ._video-wrapper video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  -o-object-fit: cover;
+     object-fit: cover;
+  opacity: 0.5;
 }
 
 .hero {
@@ -493,8 +533,29 @@ header ._content nav ul {
 }
 
 .clients {
+  width: 100vw;
+}
+
+.project-hero ._data {
+  width: 100%;
+  height: 200px;
+  background: gray;
+}
+.project-hero ._video-wrapper {
+  position: relative;
+  background: black;
+  width: 100%;
+  height: 100vh;
   overflow: hidden;
 }
-.clients ._unicorn {
-  width: 100%;
+.project-hero ._video-wrapper video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  -o-object-fit: cover;
+     object-fit: cover;
+  opacity: 0.5;
 }/*# sourceMappingURL=style.css.map */

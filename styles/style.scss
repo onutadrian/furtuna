@@ -21,7 +21,7 @@
 header {
     width: 100%;
     position: absolute;
-    z-index: 100;
+    z-index: 100000;
     color: #ffffff;
 
     ._content {
@@ -35,6 +35,49 @@ header {
                 display: flex;
                 gap: $sp24;
             }
+        }
+    }
+}
+
+.video-transition-wrapper {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: black;
+
+    z-index: 100;
+    overflow: hidden;
+
+    video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        transform: translate(-50%, -50%);
+        object-fit: cover;
+        //opacity: 0;
+    }
+
+    ._video-wrapper {
+        position: relative;
+        background: black;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+
+        video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            opacity: 0.5;
         }
     }
 }
@@ -298,9 +341,34 @@ header {
 }
 
 .clients {
-    overflow: hidden;
+    width: 100vw;
+}
 
-    ._unicorn {
+.project-hero {
+
+    ._data {
         width: 100%;
+        height: 200px;
+        background: gray;
     }
+
+    ._video-wrapper {
+        position: relative;
+        background: black;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+
+        video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            opacity: 0.5;
+        }
+    }
+
 }

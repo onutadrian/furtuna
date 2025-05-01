@@ -4,11 +4,13 @@ const lenis = new Lenis({
     autoRaf: true,
 });
 
+gsap.registerPlugin(Flip)
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function homeProjectsList() {
+function indexPage() {
 
     let viewProjectElement = document.getElementsByClassName(`_view-project-blob`)[0];
     let viewProjectContent = viewProjectElement.getElementsByClassName(`_content`)[0];
@@ -16,6 +18,7 @@ function homeProjectsList() {
     gsap.set(viewProjectElement, {
         transformOrigin: 'center center'
     });
+
     let blobState = {
         active: 0
     }; // is blob in gsapHover?
@@ -223,4 +226,114 @@ function homeProjectsList() {
     });
 }
 
-homeProjectsList()
+async function indexToProjectTransitionLeave(trigger) {
+
+    if (!trigger.hasAttribute(`video-id`)) {
+        return
+    };
+
+    let videoID = trigger.getAttribute(`video-id`);
+
+    let videoElement = document.getElementById(videoID);
+    let transitionWrapper = document.getElementsByClassName(`video-transition-wrapper`)[0];
+    let projectsWrappper = document.getElementsByClassName(`_projects-wrapper`)[0];
+    let allLeftSides = projectsWrappper.querySelectorAll('._project-item > ._left');
+    let allRightSides = projectsWrappper.querySelectorAll('._project-item > ._right');
+    let gsapHover = projectsWrappper.getElementsByClassName(`gsapHover`)
+
+    let state = Flip.getState(videoElement)
+
+    gsap.to(Array.from(gsapHover), {
+        display: `none`,
+        duration: 0
+    });
+
+    gsap.to(Array.from(allLeftSides), {
+        opacity: 0,
+        stagger: 0.05,
+        duration: 0.3
+    });
+
+    gsap.to(Array.from(allRightSides), {
+        opacity: 0,
+        stagger: 0.05,
+        duration: 0.3
+    });
+
+    transitionWrapper.appendChild(videoElement)
+
+    gsap.to(transitionWrapper, {
+        display: `block`,
+        autoAlpha: 1,
+        duration: 0
+    })
+
+    await Flip.from(state, {
+        duration: 0.3
+    })
+
+
+
+}
+
+async function indexToProjectTransitionEnter() {
+
+    let transitionWrapper = document.getElementsByClassName(`video-transition-wrapper`)[0];
+    if (!transitionWrapper.hasChildNodes()) {
+        return;
+    }
+
+    await sleep(500);
+
+    window.scrollTo(0, 0);
+
+    let videoFromTransition = transitionWrapper.getElementsByTagName(`video`)[0];
+    let projectHero = document.getElementsByClassName(`project-hero`)[0]
+    let videoWrapper = projectHero.getElementsByClassName(`_video-wrapper`)[0]
+    let inPageVideo = videoWrapper.getElementsByTagName(`video`)[0]
+
+    inPageVideo.remove();
+    videoFromTransition.parentNode.insertBefore(videoWrapper, videoFromTransition);
+    videoWrapper.appendChild(videoFromTransition)
+
+    let state = Flip.getState(videoWrapper)
+
+    projectHero.appendChild(videoWrapper)
+
+    gsap.to(transitionWrapper, {
+        autoAlpha: 0,
+        duration: 0
+    })
+
+    await Flip.from(state, {
+        duration: 0.3
+    })
+
+}
+
+barba.init({
+    transitions: [{
+        name: 'opacity-transition',
+        async leave(data) {
+            const triggeredElement = data.trigger; // the clicked element
+
+            if (triggeredElement) {
+                await indexToProjectTransitionLeave(triggeredElement)
+            }
+        },
+        async afterEnter(data) {
+            //await indexToProjectTransitionEnter()
+        }
+    }],
+    views: [{
+        namespace: 'home', // optional, if using <body data-barba-namespace="your-namespace">
+        afterEnter(data) {
+            indexPage();
+        }
+    }, {
+        namespace: 'project', // optional, if using <body data-barba-namespace="your-namespace">
+        afterEnter(data) {
+            indexToProjectTransitionEnter();
+        }
+    }]
+});
