@@ -64,11 +64,11 @@ function indexPage() {
 
                 gsap.fromTo(Array.from(currentProjectTags), {
                     y: -10,
-                    opacity: 0
+                    autoAlpha: 0
                 }, {
                     y: 0,
                     stagger: 0.05,
-                    opacity: 1,
+                    autoAlpha: 1,
                     duration: 0.2
                 });
 
@@ -79,10 +79,10 @@ function indexPage() {
 
                 gsap.fromTo(currentChatWrapper, {
                     //x: -32,
-                    opacity: 0
+                    autoAlpha: 0
                 }, {
                     //x: 0,
-                    opacity: 1,
+                    autoAlpha: 1,
                     duration: 0.3
                 });
 
@@ -106,7 +106,7 @@ function indexPage() {
                     });
 
                     currentChatTypingIndicatorAnimation = gsap.to(currentChatTypingIndicator, {
-                        opacity: 0,
+                        autoAlpha: 0,
                         delay: 2.5,
                         duration: 0
                     })
@@ -134,7 +134,7 @@ function indexPage() {
                     gsap.to(Array.from(lastProjectTags), {
                         y: -10,
                         stagger: 0.05,
-                        opacity: 0,
+                        autoAlpha: 0,
                         duration: 0.2
                     });
 
@@ -145,7 +145,7 @@ function indexPage() {
 
                     gsap.to(lastChatWrapper, {
                         //x: -32,
-                        opacity: 0,
+                        autoAlpha: 0,
                         duration: 0.3
                     });
                 }
@@ -243,19 +243,20 @@ async function indexToProjectTransitionLeave(trigger) {
 
     let state = Flip.getState(videoElement)
 
+
     gsap.to(Array.from(gsapHover), {
         display: `none`,
         duration: 0
     });
 
     gsap.to(Array.from(allLeftSides), {
-        opacity: 0,
+        autoAlpha: 0,
         stagger: 0.05,
         duration: 0.3
     });
 
     gsap.to(Array.from(allRightSides), {
-        opacity: 0,
+        autoAlpha: 0,
         stagger: 0.05,
         duration: 0.3
     });
@@ -272,6 +273,10 @@ async function indexToProjectTransitionLeave(trigger) {
         duration: 0.3
     })
 
+    await gsap.to(videoElement, {
+        autoAlpha: 1,
+        duration: 0.3
+    });
 
 
 }
@@ -283,14 +288,31 @@ async function indexToProjectTransitionEnter() {
         return;
     }
 
-    await sleep(500);
-
-    window.scrollTo(0, 0);
-
     let videoFromTransition = transitionWrapper.getElementsByTagName(`video`)[0];
     let projectHero = document.getElementsByClassName(`project-hero`)[0]
     let videoWrapper = projectHero.getElementsByClassName(`_video-wrapper`)[0]
     let inPageVideo = videoWrapper.getElementsByTagName(`video`)[0]
+    let projectTitle = projectHero.getElementsByClassName(`_title`)[0]
+    let projectMetaWrappers = projectHero.getElementsByClassName(`_meta-wrapper`)
+
+    gsap.to(videoFromTransition, {
+        autoAlpha: 1,
+        duration: 0
+    });
+
+    gsap.to(projectTitle, {
+        autoAlpha: 0,
+        duration: 0
+    })
+
+    gsap.to(Array.from(projectMetaWrappers), {
+        autoAlpha: 0,
+        duration: 0
+    })
+
+    await sleep(500);
+
+    window.scrollTo(0, 0);
 
     inPageVideo.remove();
     videoFromTransition.parentNode.insertBefore(videoWrapper, videoFromTransition);
@@ -305,15 +327,34 @@ async function indexToProjectTransitionEnter() {
         duration: 0
     })
 
-    await Flip.from(state, {
-        duration: 0.3
+    gsap.fromTo(projectTitle, {
+        y: 24
+    }, {
+        y: 0,
+        autoAlpha: 1,
+        duration: 0.3,
+        delay: 0.8
     })
 
+    gsap.fromTo(Array.from(projectMetaWrappers), {
+        y: 24
+    }, {
+        y: 0,
+        autoAlpha: 1,
+        duration: 0.3,
+        stagger: 0.1,
+        delay: 0.9
+    })
+
+    await Flip.from(state, {
+        duration: 1,
+        ease: "power2.inOut"
+    })
 }
 
 barba.init({
     transitions: [{
-        name: 'opacity-transition',
+        name: 'autoAlpha-transition',
         async leave(data) {
             const triggeredElement = data.trigger; // the clicked element
 

@@ -1,8 +1,8 @@
 //<a href="" class="cta-button">
 //  <div class="text-wrapper">
-//      <p class="medium-l">See what we do</p>
+//      <p>See what we do</p>
 //  </div>
-//  <div class="cta-icon">
+//  <div class="_icon">
 //      <svg width="37" height="23" viewBox="0 0 37 23" fill="none"
 //          xmlns="http://www.w3.org/2000/svg">
 //          <path
@@ -22,6 +22,10 @@
     display: flex;
     align-items: center;
     gap: $sp32;
+
+    p {
+        @include medium-l;
+    }
 
     ._icon {
         width: 37px;
@@ -47,6 +51,43 @@
                 transition: 0.5s;
                 color: #FFDC73;
                 transform: translateX(0%);
+            }
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .cta-button {
+    
+        p {
+            @include medium-s;
+        }
+    
+        ._icon {
+            width: 37px;
+            height: 100%;
+            display: flex;
+            overflow: hidden;
+            gap: $sp24;
+    
+            svg {
+                transform: translateX(calc(-100% - 24px));
+                flex: none;
+            }
+        }
+    
+        &:hover {
+            >.text-wrapper {
+                transition: 0.3s;
+                color: #FFDC73;
+            }
+    
+            >._icon {
+                svg {
+                    transition: 0.5s;
+                    color: #FFDC73;
+                    transform: translateX(0%);
+                }
             }
         }
     }

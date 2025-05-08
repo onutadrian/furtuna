@@ -6,7 +6,7 @@
     font-style: normal;
 }
 
-.book-xs {
+@mixin book-xs {
     font-family: 'mainfont', sans-serif;
     font-weight: 400;
     font-size: 0.75rem;
@@ -16,7 +16,7 @@
     margin-bottom: -0.125rem;
 }
 
-.book-s {
+@mixin book-s {
     font-family: 'mainfont', sans-serif;
     font-weight: 400;
     font-size: 1rem;
@@ -26,7 +26,7 @@
     margin-bottom: -0.3125rem;
 }
 
-.book-ms {
+@mixin book-ms {
     font-family: 'mainfont', sans-serif;
     font-weight: 400;
     font-size: 1.25rem;
@@ -35,7 +35,7 @@
     margin-bottom: -0.3125rem;
 }
 
-.book-m {
+@mixin book-m {
     font-family: 'mainfont', sans-serif;
     font-weight: 400;
     font-size: 1.5rem;
@@ -44,7 +44,7 @@
     margin-bottom: -0.375rem;
 }
 
-.book-ml {
+@mixin book-ml {
     font-family: 'mainfont', sans-serif;
     font-weight: 400;
     font-size: 1.875rem;
@@ -53,7 +53,7 @@
     margin-bottom: -0.5rem;
 }
 
-.book-l {
+@mixin book-l {
     font-family: 'mainfont', sans-serif;
     font-weight: 400;
     font-size: 2.25rem;
@@ -62,7 +62,7 @@
     margin-bottom: -0.25rem;
 }
 
-.book-xl {
+@mixin book-xl {
     font-family: 'mainfont', sans-serif;
     font-weight: 400;
     font-size: 3rem;
@@ -71,7 +71,7 @@
     margin-bottom: -0.375rem;
 }
 
-.book-xxl {
+@mixin book-xxl {
     font-family: 'mainfont', sans-serif;
     font-weight: 400;
     font-size: 3.75rem;
@@ -80,7 +80,7 @@
     margin-bottom: -0.5rem;
 }
 
-.book-3xl {
+@mixin book-3xl {
     font-family: 'mainfont', sans-serif;
     font-weight: 400;
     font-size: 4.5rem;
@@ -89,7 +89,7 @@
     margin-bottom: -0.625rem;
 }
 
-.book-4xl {
+@mixin book-4xl {
     font-family: 'mainfont', sans-serif;
     font-weight: 400;
     font-size: 6rem;
@@ -98,7 +98,7 @@
     margin-bottom: -0.8125rem;
 }
 
-.medium-xs {
+@mixin medium-xs {
     font-family: 'mainfont', sans-serif;
     font-weight: 530;
     font-size: 0.75rem;
@@ -108,7 +108,7 @@
     margin-bottom: -0.125rem;
 }
 
-.medium-s {
+@mixin medium-s {
     font-family: 'mainfont', sans-serif;
     font-weight: 530;
     font-size: 1rem;
@@ -118,7 +118,7 @@
     margin-bottom: -0.3125rem;
 }
 
-.medium-ms {
+@mixin medium-ms {
     font-family: 'mainfont', sans-serif;
     font-weight: 530;
     font-size: 1.25rem;
@@ -127,7 +127,7 @@
     margin-bottom: -0.3125rem;
 }
 
-.medium-m {
+@mixin medium-m {
     font-family: 'mainfont', sans-serif;
     font-weight: 530;
     font-size: 1.5rem;
@@ -136,7 +136,7 @@
     margin-bottom: -0.375rem;
 }
 
-.medium-ml {
+@mixin medium-ml {
     font-family: 'mainfont', sans-serif;
     font-weight: 530;
     font-size: 1.875rem;
@@ -145,7 +145,7 @@
     margin-bottom: -0.5rem;
 }
 
-.medium-l {
+@mixin medium-l {
     font-family: 'mainfont', sans-serif;
     font-weight: 530;
     font-size: 2.25rem;
@@ -154,7 +154,7 @@
     margin-bottom: -0.25rem;
 }
 
-.medium-xl {
+@mixin medium-xl {
     font-family: 'mainfont', sans-serif;
     font-weight: 530;
     font-size: 3rem;
@@ -163,7 +163,7 @@
     margin-bottom: -0.375rem;
 }
 
-.medium-xxl {
+@mixin medium-xxl {
     font-family: 'mainfont', sans-serif;
     font-weight: 530;
     font-size: 3.75rem;
@@ -172,7 +172,7 @@
     margin-bottom: -0.5rem;
 }
 
-.medium-3xl {
+@mixin medium-3xl {
     font-family: 'mainfont', sans-serif;
     font-weight: 530;
     font-size: 4.5rem;
@@ -181,7 +181,7 @@
     margin-bottom: -0.625rem;
 }
 
-.medium-4xl {
+@mixin medium-4xl {
     font-family: 'mainfont', sans-serif;
     font-weight: 530;
     font-size: 6rem;
