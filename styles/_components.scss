@@ -23,9 +23,15 @@
     align-items: center;
     gap: $sp32;
 
-    p {
-        @include medium-l;
+
+    .text-wrapper {
+        transition: 0.3s;
+
+        p {
+            @include medium-l;
+        }
     }
+
 
     ._icon {
         width: 37px;
@@ -35,6 +41,7 @@
         gap: $sp24;
 
         svg {
+            transition: 0.5s;
             transform: translateX(calc(-100% - 24px));
             flex: none;
         }
@@ -42,13 +49,11 @@
 
     &:hover {
         >.text-wrapper {
-            transition: 0.3s;
             color: #FFDC73;
         }
 
         >._icon {
             svg {
-                transition: 0.5s;
                 color: #FFDC73;
                 transform: translateX(0%);
             }
@@ -58,36 +63,11 @@
 
 @media (max-width: 1024px) {
     .cta-button {
+
+        .text-wrapper {
     
-        p {
-            @include medium-s;
-        }
-    
-        ._icon {
-            width: 37px;
-            height: 100%;
-            display: flex;
-            overflow: hidden;
-            gap: $sp24;
-    
-            svg {
-                transform: translateX(calc(-100% - 24px));
-                flex: none;
-            }
-        }
-    
-        &:hover {
-            >.text-wrapper {
-                transition: 0.3s;
-                color: #FFDC73;
-            }
-    
-            >._icon {
-                svg {
-                    transition: 0.5s;
-                    color: #FFDC73;
-                    transform: translateX(0%);
-                }
+            p {
+                @include medium-s;
             }
         }
     }
