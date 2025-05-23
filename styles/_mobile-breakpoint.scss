@@ -1,5 +1,11 @@
+body {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
 .full-width-grid {
     margin: 0 $sp16;
+    column-gap: 1rem;
 }
 
 header {
@@ -7,6 +13,7 @@ header {
 }
 
 .hero {
+    height: 100svh;
 
     ._content {
         grid-column: 1 / 19;
@@ -18,7 +25,7 @@ header {
         }
 
         ._mid {
-            margin-bottom: $sp48;
+
 
             ._hero-text {
                 max-width: 360px;
@@ -33,6 +40,8 @@ header {
                 }
 
                 ._headliner {
+                    margin-bottom: $sp48;
+
                     p {
                         @include book-l;
                     }
@@ -47,7 +56,7 @@ header {
             align-items: start;
 
             ._text {
-                margin-bottom: $sp24;
+                margin-bottom: $sp40;
                 max-width: 20rem;
                 border-left: 5px solid #ffffff;
                 padding-left: $sp4;
@@ -75,7 +84,7 @@ header {
             flex-direction: row;
             justify-content: space-between;
             color: #ffffff;
-            gap: $sp48;
+            gap: $sp64;
 
             ._left {
 
@@ -105,15 +114,16 @@ header {
 }
 
 .studio-overview {
+    position: relative;
 
     ._content {
-        margin-top: $sp16;
+        margin-top: $sp40;
         grid-column: 1 / 19;
 
         ._texts {
 
             ._section-title {
-                margin-bottom: $sp8;
+                margin-bottom: $sp48;
 
                 p {
                     @include book-m;
@@ -122,20 +132,20 @@ header {
 
             ._headline {
                 max-width: 22.5rem;
-                margin-bottom: $sp8;
+                margin-bottom: $sp40;
 
                 p {
-                    @include book-ms;
+                    @include book-l;
                     line-height: 120%;
                 }
             }
 
             ._subheadline {
                 max-width: 22.5rem;
-                margin-bottom: $sp48;
+                margin-bottom: $sp56;
 
                 p {
-                    @include book-xs;
+                    @include book-m;
                 }
             }
 
@@ -155,19 +165,19 @@ header {
     }
 
     ._bolt-mobile {
-        position: relative;
-        z-index: 5;
+        position: absolute;
+        top: 0;
         display: block;
-        margin-bottom: -95%;
     }
 
     ._studio-overview-image-mobile {
         display: block;
+        margin-top: 30%;
     }
 }
 
 .industries-overview {
-    padding-top: $sp80;
+    padding-top: $sp40;
     padding-bottom: $sp80;
 
     ._left {
@@ -184,14 +194,14 @@ header {
             ._section-title {
 
                 p {
-                    @include book-ml;
+                    @include book-m;
                 }
             }
 
             ._supportive-text {
 
                 p {
-                    @include book-s;
+                    @include book-m;
                 }
             }
         }
@@ -199,12 +209,14 @@ header {
 
     ._right {
         grid-column: 1 / 19;
+        margin-top: $sp40;
 
         ._industry-wrapper {
-            padding: $sp48 0;
+            padding: $sp40 0;
 
             &:nth-child(3) {
-                margin-bottom: $sp160;
+                padding-bottom: $sp40;
+                margin-bottom: 0;
             }
 
             ._title {
@@ -256,6 +268,12 @@ header {
 }
 
 footer {
+    padding: 5rem 0rem;
+
+    ._contact-blob {
+        display: none;
+    }
+
     ._content {
         grid-column: 1 / 19;
 
@@ -267,27 +285,51 @@ footer {
             display: flex;
             justify-content: center;
 
-            ._contact-cta {
+            a {
 
-                ._heading {
-                    margin-bottom: $sp24;
+                ._contact-cta {
+                    padding: 0 0;
 
-                    p {
-                        @include medium-xl;
+                    ._heading {
+
+                        p {
+                            @include medium-m;
+                            color: #FFDC73;
+                        }
                     }
-                }
 
-                ._subheading {
-                    p {
-                        @include medium-ms;
+                    ._subheading {
+                        margin-bottom: $sp24;
+
+                        p {
+                            @include book-ms;
+                            color: #ffffff;
+                        }
                     }
-                }
 
-                ._unicorn-studio {
-                    position: absolute;
-                    background: red;
-                    width: 100%;
-                    height: 600px;
+                    ._unicorn-studio {
+                        position: absolute;
+                        background: red;
+                        width: 100%;
+                        height: 600px;
+                    }
+
+                    ._mobile-contact-button {
+                        margin: 120px auto;
+                        display: block;
+                        width: 220px;
+                        height: 220px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        border-radius: 500px;
+                        background: rgba(255, 220, 115, 0.85);
+
+                        p {
+                            @include medium-l;
+                            color: #ffffff;
+                        }
+                    }
                 }
             }
         }

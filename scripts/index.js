@@ -19,7 +19,7 @@ function indexPage() {
         transformOrigin: 'center center'
     });
 
-    let blobState = {
+    let pojectsBlobState = {
         active: 0
     }; // is blob in gsapHover?
 
@@ -86,7 +86,7 @@ function indexPage() {
 
         gsapHover.addEventListener(`pointerenter`, async () => {
 
-            gsap.to(blobState, {
+            gsap.to(pojectsBlobState, {
                 active: 1,
                 duration: 0.3
             });
@@ -194,7 +194,7 @@ function indexPage() {
         gsapHover.addEventListener(`pointerleave`, async () => {
             lastProjectItem = projectItems[i];
 
-            gsap.to(blobState, {
+            gsap.to(pojectsBlobState, {
                 active: 0,
                 duration: 0.3,
                 ease: 'power1.out'
@@ -242,8 +242,8 @@ function indexPage() {
         set.y(pos.y);
         set.width(230 + scale * 150);
         set.r(rotation);
-        set.sx((1 + scale) * blobState.active);
-        set.sy((1 - scale) * blobState.active);
+        set.sx((1 + scale) * pojectsBlobState.active);
+        set.sy((1 - scale) * pojectsBlobState.active);
         set.rt(-rotation);
     }
 
@@ -393,6 +393,92 @@ async function indexToProjectTransitionEnter() {
     })
 }
 
+function footerBlob() {
+    let contactBlobElement = document.getElementsByClassName(`_contact-blob`)[0];
+    let contactBlobContent = contactBlobElement.getElementsByClassName(`_content`)[0];
+    let footerContactCtaElement = document.getElementsByClassName(`_contact-cta`)[0];
+
+    let footerBlobState = {
+        active: 0
+    }; // is blob in gsapHover?
+
+    footerContactCtaElement.addEventListener(`pointerenter`, async () => {
+
+        gsap.to(footerBlobState, {
+            active: 1,
+            duration: 0.3
+        });
+    })
+
+    footerContactCtaElement.addEventListener(`pointerleave`, async () => {
+        gsap.to(footerBlobState, {
+            active: 0,
+            duration: 0.3,
+            ease: 'power1.out'
+        });
+    })
+
+    function getAngle(dx, dy) {
+        return (Math.atan2(dy, dx) * 180) / Math.PI;
+    }
+
+    function getScale(dx, dy) {
+        let dist = Math.hypot(dx, dy);
+        return Math.min(dist / 1200, 0.35);
+    }
+
+    let pos = {
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2
+    };
+    let vel = {
+        x: 0,
+        y: 0
+    };
+
+    let set = {
+        x: gsap.quickSetter(contactBlobElement, "x", "px"),
+        y: gsap.quickSetter(contactBlobElement, "y", "px"),
+        width: gsap.quickSetter(contactBlobElement, "width", "px"),
+        r: gsap.quickSetter(contactBlobElement, "rotation", "deg"),
+        sx: gsap.quickSetter(contactBlobElement, "scaleX"),
+        sy: gsap.quickSetter(contactBlobElement, "scaleY"),
+        rt: gsap.quickSetter(contactBlobContent, "rotation", "deg")
+    };
+
+    function updateBlob() {
+        let rotation = getAngle(vel.x, vel.y);
+        let scale = getScale(vel.x, vel.y);
+
+        set.x(pos.x);
+        set.y(pos.y);
+        set.width(180 + scale * 150);
+        set.r(rotation);
+        set.sx((1 + scale) * footerBlobState.active);
+        set.sy((1 - scale) * footerBlobState.active);
+        set.rt(-rotation);
+    }
+
+    gsap.ticker.add(updateBlob);
+
+    window.addEventListener("mousemove", (e) => {
+        let x = e.clientX,
+            y = e.clientY;
+        gsap.to(pos, {
+            x,
+            y,
+            duration: 1,
+            ease: "expo.out",
+            onUpdate: () => {
+                vel.x = x - pos.x;
+                vel.y = y - pos.y;
+            }
+        });
+
+        updateBlob();
+    });
+}
+
 barba.init({
     transitions: [{
         name: 'autoAlpha-transition',
@@ -411,6 +497,7 @@ barba.init({
         namespace: 'home', // optional, if using <body data-barba-namespace="your-namespace">
         afterEnter(data) {
             indexPage();
+            footerBlob();
         }
     }, {
         namespace: 'project', // optional, if using <body data-barba-namespace="your-namespace">

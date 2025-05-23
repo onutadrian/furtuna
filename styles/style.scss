@@ -669,10 +669,48 @@ header {
 
 footer {
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+    
     background: #111111;
+    position: relative;
+
+    ._contact-blob {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 180px;
+        height: 180px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 500px;
+        transform-origin: 50% 50%;
+        transform: translate(-50%, -50%);
+        will-change: width, height, transform, border;
+        z-index: 999;
+        pointer-events: none;
+        background: rgba(255, 220, 115, 0.85);
+        backdrop-filter: blur(4px);
+
+        ._content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: $sp16;
+            color: #ffffff;
+
+            p {
+                @include medium-l;
+            }
+        }
+
+    }
 
     ._content {
+        z-index: 5;
         grid-column: 2 / 18;
         width: 100%;
         height: 100vh;
@@ -688,34 +726,45 @@ footer {
             display: flex;
             justify-content: center;
 
-            ._contact-cta {
-                position: relative;
-                display: flex;
-                flex-direction: column;
+            a {
                 width: 100%;
-                text-align: center;
 
-                ._heading {
-                    margin-bottom: $sp32;
-
-                    p {
-                        @include medium-3xl;
-                        color: #ffffff;
-                    }
-                }
-
-                ._subheading {
-                    p {
-                        @include medium-ms;
-                        color: #FFDC73;
-                    }
-                }
-
-                ._unicorn-studio {
-                    position: absolute;
-                    background: red;
+                ._contact-cta {
+                    padding: 20vh 0;
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
                     width: 100%;
-                    height: 600px;
+                    text-align: center;
+
+
+                    ._subheading {
+                        margin-bottom: $sp24;
+
+                        p {
+                            @include medium-ml;
+                            color: #ffffff;
+                        }
+                    }
+
+                    ._heading {
+
+                        p {
+                            @include medium-xl;
+                            color: #FFDC73;
+                        }
+                    }
+
+                    ._unicorn-studio {
+                        position: absolute;
+                        background: red;
+                        width: 100%;
+                        height: 600px;
+                    }
+
+                    ._mobile-contact-button {
+                        display: none;
+                    }
                 }
             }
         }
@@ -785,6 +834,12 @@ footer {
             }
 
         }
+    }
+
+    ._background-logo {
+        position: absolute;
+        bottom: 0;
+
     }
 }
 
