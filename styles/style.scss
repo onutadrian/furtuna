@@ -586,6 +586,7 @@ header {
 }
 
 .project-hero {
+    padding-bottom: $sp80;
 
     ._project-metas {
         margin-top: $sp240;
@@ -670,7 +671,7 @@ header {
 footer {
     width: 100%;
     min-height: 100vh;
-    
+
     background: #111111;
     position: relative;
 

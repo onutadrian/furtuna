@@ -12,17 +12,6 @@ function sleep(ms) {
 
 function indexPage() {
 
-    let viewProjectElement = document.getElementsByClassName(`_view-project-blob`)[0];
-    let viewProjectContent = viewProjectElement.getElementsByClassName(`_content`)[0];
-
-    gsap.set(viewProjectElement, {
-        transformOrigin: 'center center'
-    });
-
-    let pojectsBlobState = {
-        active: 0
-    }; // is blob in gsapHover?
-
     let projectItems = document.getElementsByClassName(`_project-item`)
     let lastProjectItem = `none`;
 
@@ -40,10 +29,7 @@ function indexPage() {
         let currentChatAnimationStatus;
 
         let currentChatMessageIslands = projectItems[i].getElementsByClassName(`_chat-island`)
-        let currentChatIslandAnimation;
-
         let currentChatTypingIndicator = projectItems[i].getElementsByClassName(`_typing`)[0]
-        let currentChatTypingIndicatorAnimation;
 
         ScrollTrigger.matchMedia({
             "(max-width: 1008px)": function () {
@@ -85,11 +71,6 @@ function indexPage() {
         })
 
         gsapHover.addEventListener(`pointerenter`, async () => {
-
-            gsap.to(pojectsBlobState, {
-                active: 1,
-                duration: 0.3
-            });
 
             if (lastProjectItem != projectItems[i]) {
 
@@ -193,78 +174,10 @@ function indexPage() {
 
         gsapHover.addEventListener(`pointerleave`, async () => {
             lastProjectItem = projectItems[i];
-
-            gsap.to(pojectsBlobState, {
-                active: 0,
-                duration: 0.3,
-                ease: 'power1.out'
-            });
         })
 
-
     }
 
-    // View Project Blob Animation ---------------
-
-    function getAngle(dx, dy) {
-        return (Math.atan2(dy, dx) * 180) / Math.PI;
-    }
-
-    function getScale(dx, dy) {
-        let dist = Math.hypot(dx, dy);
-        return Math.min(dist / 1200, 0.35);
-    }
-
-    let pos = {
-        x: window.innerWidth / 2,
-        y: window.innerHeight / 2
-    };
-    let vel = {
-        x: 0,
-        y: 0
-    };
-
-    let set = {
-        x: gsap.quickSetter(viewProjectElement, "x", "px"),
-        y: gsap.quickSetter(viewProjectElement, "y", "px"),
-        width: gsap.quickSetter(viewProjectElement, "width", "px"),
-        r: gsap.quickSetter(viewProjectElement, "rotation", "deg"),
-        sx: gsap.quickSetter(viewProjectElement, "scaleX"),
-        sy: gsap.quickSetter(viewProjectElement, "scaleY"),
-        rt: gsap.quickSetter(viewProjectContent, "rotation", "deg")
-    };
-
-    function updateBlob() {
-        let rotation = getAngle(vel.x, vel.y);
-        let scale = getScale(vel.x, vel.y);
-
-        set.x(pos.x);
-        set.y(pos.y);
-        set.width(230 + scale * 150);
-        set.r(rotation);
-        set.sx((1 + scale) * pojectsBlobState.active);
-        set.sy((1 - scale) * pojectsBlobState.active);
-        set.rt(-rotation);
-    }
-
-    gsap.ticker.add(updateBlob);
-
-    window.addEventListener("mousemove", (e) => {
-        let x = e.clientX,
-            y = e.clientY;
-        gsap.to(pos, {
-            x,
-            y,
-            duration: 1,
-            ease: "expo.out",
-            onUpdate: () => {
-                vel.x = x - pos.x;
-                vel.y = y - pos.y;
-            }
-        });
-
-        updateBlob();
-    });
 }
 
 async function indexToProjectTransitionLeave(trigger) {
@@ -393,29 +306,36 @@ async function indexToProjectTransitionEnter() {
     })
 }
 
-function footerBlob() {
-    let contactBlobElement = document.getElementsByClassName(`_contact-blob`)[0];
-    let contactBlobContent = contactBlobElement.getElementsByClassName(`_content`)[0];
-    let footerContactCtaElement = document.getElementsByClassName(`_contact-cta`)[0];
+function createBlob(blobElement, blobContent, hoverElements, blobSize) {
 
-    let footerBlobState = {
+    //blobElement always getElementsByClassName(`x`)[0]
+    //blobContent always getElementsByClassName(`x`)[0]
+    //hoverElements always querySelectorAll(`x`) even if only one
+    //blobSize width of blob int value
+
+    gsap.set(blobElement, {
+        transformOrigin: 'center center'
+    });
+
+    let blobState = {
         active: 0
     }; // is blob in gsapHover?
 
-    footerContactCtaElement.addEventListener(`pointerenter`, async () => {
+    hoverElements.forEach(hoverElement => {
+        hoverElement.addEventListener(`pointerenter`, async () => {
+            gsap.to(blobState, {
+                active: 1,
+                duration: 0.3
+            });
+        })
 
-        gsap.to(footerBlobState, {
-            active: 1,
-            duration: 0.3
-        });
-    })
-
-    footerContactCtaElement.addEventListener(`pointerleave`, async () => {
-        gsap.to(footerBlobState, {
-            active: 0,
-            duration: 0.3,
-            ease: 'power1.out'
-        });
+        hoverElement.addEventListener(`pointerleave`, async () => {
+            gsap.to(blobState, {
+                active: 0,
+                duration: 0.3,
+                ease: 'power1.out'
+            });
+        })
     })
 
     function getAngle(dx, dy) {
@@ -437,13 +357,13 @@ function footerBlob() {
     };
 
     let set = {
-        x: gsap.quickSetter(contactBlobElement, "x", "px"),
-        y: gsap.quickSetter(contactBlobElement, "y", "px"),
-        width: gsap.quickSetter(contactBlobElement, "width", "px"),
-        r: gsap.quickSetter(contactBlobElement, "rotation", "deg"),
-        sx: gsap.quickSetter(contactBlobElement, "scaleX"),
-        sy: gsap.quickSetter(contactBlobElement, "scaleY"),
-        rt: gsap.quickSetter(contactBlobContent, "rotation", "deg")
+        x: gsap.quickSetter(blobElement, "x", "px"),
+        y: gsap.quickSetter(blobElement, "y", "px"),
+        width: gsap.quickSetter(blobElement, "width", "px"),
+        r: gsap.quickSetter(blobElement, "rotation", "deg"),
+        sx: gsap.quickSetter(blobElement, "scaleX"),
+        sy: gsap.quickSetter(blobElement, "scaleY"),
+        rt: gsap.quickSetter(blobContent, "rotation", "deg")
     };
 
     function updateBlob() {
@@ -452,10 +372,10 @@ function footerBlob() {
 
         set.x(pos.x);
         set.y(pos.y);
-        set.width(180 + scale * 150);
+        set.width(blobSize + scale * 150);
         set.r(rotation);
-        set.sx((1 + scale) * footerBlobState.active);
-        set.sy((1 - scale) * footerBlobState.active);
+        set.sx((1 + scale) * blobState.active);
+        set.sy((1 - scale) * blobState.active);
         set.rt(-rotation);
     }
 
@@ -479,6 +399,20 @@ function footerBlob() {
     });
 }
 
+function initBlobs() {
+    let footerBlobElement = document.getElementsByClassName(`_contact-blob`)[0];
+    let footerBlobContent = footerBlobElement.getElementsByClassName(`_content`)[0];
+    let footerHoverElement = document.querySelectorAll(`._contact-cta`);
+
+    createBlob(footerBlobElement, footerBlobContent, footerHoverElement, 180)
+
+    let projectsBlobElement = document.getElementsByClassName(`_view-project-blob`)[0];
+    let projectsBlobContent = projectsBlobElement.getElementsByClassName(`_content`)[0];
+    let projectsHoverElement = document.querySelectorAll(`.gsapHover`);
+
+    createBlob(projectsBlobElement, projectsBlobContent, projectsHoverElement, 230)
+}
+
 barba.init({
     transitions: [{
         name: 'autoAlpha-transition',
@@ -497,12 +431,13 @@ barba.init({
         namespace: 'home', // optional, if using <body data-barba-namespace="your-namespace">
         afterEnter(data) {
             indexPage();
-            footerBlob();
+            initBlobs();
         }
     }, {
         namespace: 'project', // optional, if using <body data-barba-namespace="your-namespace">
         afterEnter(data) {
             indexToProjectTransitionEnter();
+            initBlobs();
         }
     }]
 });
