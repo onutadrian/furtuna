@@ -103,11 +103,16 @@
         display: flex;
         flex-direction: column;
 
-        img,
-        video {
+        ._wrapper {
+            overflow: hidden;
             width: 100%;
-        }
 
+            img,
+            video {
+                width: 100%;
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+        }
 
         ._description {
             margin-top: $sp32;
@@ -143,10 +148,17 @@
     ._content {
         display: flex;
         flex-direction: row;
+        justify-content: space-between;
 
-        img,
-        video {
+        ._wrapper {
             max-width: calc(100% - 30.625rem - #{$sp24});
+            overflow: hidden;
+
+            img,
+            video {
+                width: 100%;
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
         }
 
         ._description {
@@ -188,11 +200,13 @@
             gap: $sp24;
 
             ._wrapper {
+                overflow: hidden;
 
                 img,
                 video {
                     height: auto;
                     max-width: 100%;
+                    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
                 }
             }
 
@@ -241,6 +255,15 @@
             display: flex;
             flex-direction: column;
 
+            ._wrapper {
+                overflow: hidden;
+
+                img,
+                video {
+                    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+                }
+            }
+
             ._description {
                 margin-top: $sp32;
                 max-width: 30.625rem; //490px
@@ -253,6 +276,15 @@
 
         ._right {
             grid-column: 8 / 19;
+
+            ._wrapper {
+                overflow: hidden;
+
+                img,
+                video {
+                    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+                }
+            }
         }
     }
 }
@@ -270,6 +302,15 @@
 
         ._left {
             grid-column: 1 / 12;
+
+            ._wrapper {
+                overflow: hidden;
+
+                img,
+                video {
+                    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+                }
+            }
         }
 
         ._right {
@@ -277,6 +318,15 @@
             display: flex;
             flex-direction: column;
             align-items: end;
+
+            ._wrapper {
+                overflow: hidden;
+
+                img,
+                video {
+                    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+                }
+            }
 
             ._description {
                 margin-top: $sp32;
@@ -288,6 +338,241 @@
             }
         }
     }
+}
+
+@mixin cs-fig-1x2-asym {
+    margin-bottom: $sp160;
+    grid-column: 1 / 19;
+    display: grid;
+
+    ._content {
+            display: flex;
+            flex-direction: column;
+
+        ._images {
+            display: flex;
+            gap: $sp24;
+            width: 100%;
+            align-items: stretch;
+
+            ._left,
+            ._right {
+                width: 50%;
+                display: flex;
+                flex-direction: column;
+                flex: 1 1 auto;
+
+                ._wrapper {
+                    display: flex;
+                    flex-direction: column;
+                    gap: $sp24;
+                    flex: 1;
+
+                    img,
+                    video {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                }
+            }
+        }
+
+        ._description {
+            margin-top: $sp32;
+            max-width: 30.625rem; //490px
+
+            p {
+                @include book-m;
+            }
+        }
+    }
+}
+
+.cs-fig-1x2-asym-left {
+    @include cs-fig-1x2-asym;
+}
+
+.cs-fig-1x2-asym-right {
+    @include cs-fig-1x2-asym;
+
+    ._content {
+        align-items: end;
+    }
+}
+
+.cs-int-compare {
+    margin-bottom: $sp160;
+    grid-column: 1 / 19;
+    position: relative;
+
+    canvas {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        z-index: 50;
+    }
+
+    ._content {
+        position: relative;
+        background: #000000;
+
+        ._images {
+            position: relative;
+            transition: 0.1s;
+
+            ._before {
+                position: absolute;
+                top: 0;
+                z-index: 5;
+
+                ._text {
+                    display: flex;
+                    align-items: center;
+                    position: absolute;
+                    height: 100%;
+                    color: #ffffff;
+                    background: linear-gradient(90deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0) 100%);
+
+                    p {
+                        @include medium-ms;
+                        background: #000000;
+                        padding: $sp16;
+                        border-radius: $sp8;
+                        transform: rotate(-90deg);
+                    }
+                }
+            }
+
+            ._after {
+
+                ._text {
+                    display: flex;
+                    align-items: center;
+                    position: absolute;
+                    right: 0;
+                    height: 100%;
+                    color: #ffffff;
+                    background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.05) 100%);
+
+                    p {
+                        @include medium-ms;
+                        background: #000000;
+                        padding: $sp16;
+                        border-radius: $sp8;
+                        transform: rotate(90deg);
+                    }
+                }
+            }
+        }
+
+        ._divider {
+            position: absolute;
+            top: 0;
+            z-index: 5;
+            width: 4px;
+            height: 100%;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+
+            ._indicator {
+                position: absolute;
+                height: 100px;
+                width: 100px;
+                transform: translateX(-48px);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                ._icon-background {
+                    transition: 0.2s;
+                    height: 100px;
+                    width: 100px;
+                    background: #ffffff;
+                    border-radius: 500px;
+                    border: 4px solid #FFBF00;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    &:hover,
+                    &:active {
+                        background: #FFBF00;
+                    }
+                }
+
+                ._pulsating-circle {
+                    position: absolute;
+                    height: 100px;
+                    width: 100px;
+                    background: #FFBF00;
+                    border-radius: 500px;
+                    z-index: -2;
+                }
+            }
+        }
+    }
+}
+
+.cs-int-drag {
+    margin-bottom: $sp160;
+    grid-column: 1 / 19;
+    max-height: 100vh;
+
+    ._drag-blob {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 128px;
+        height: 128px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 500px;
+        transform-origin: 50% 50%;
+        transform: translate(-50%, -50%);
+        will-change: width, height, transform, border;
+        z-index: 999;
+        pointer-events: none;
+        border: 1px solid #000000;
+
+        ._blob-content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: $sp16;
+
+            p {
+                @include medium-m;
+            }
+        }
+
+    }
+
+    ._content {
+        overflow: hidden;
+        height: 100%;
+        background: #E3E6EA;
+        padding: $sp24;
+
+        ._gallery {
+            height: 100%;
+            display: flex;
+            gap: $sp24;
+
+
+            img {
+                height: 100%;
+                flex-shrink: none;
+            }
+        }
+    }
+
 }
 
 .cs-testimonial {

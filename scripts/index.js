@@ -4,179 +4,217 @@ const lenis = new Lenis({
     autoRaf: true,
 });
 
-gsap.registerPlugin(Flip, ScrollTrigger)
+gsap.registerPlugin(Flip, ScrollTrigger, Draggable, InertiaPlugin, SplitText)
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function indexPage() {
+let mobileBreakpoint = 1024; //px
+let isDesktop = window.innerWidth > mobileBreakpoint;
 
-    let projectItems = document.getElementsByClassName(`_project-item`)
-    let lastProjectItem = `none`;
+window.addEventListener('resize', () => {
+    let isResizeDesktop = window.innerWidth > mobileBreakpoint;
+    if (isResizeDesktop !== isDesktop) {
+        if (isResizeDesktop) {
+            const evt = new CustomEvent('switchedToDesktop', {})
+            window.dispatchEvent(evt);
+        } else {
+            const evt = new CustomEvent('switchedToMobile', {})
+            window.dispatchEvent(evt);
+        }
+        isDesktop = isResizeDesktop;
+    }
+});
 
-    for (let i = 0; i < projectItems.length; i++) {
+function workSection() {
 
-        let currentVideoId = projectItems[i].getAttribute(`video-id`)
-        let currentVideoElement = document.getElementById(currentVideoId)
+    let projectItems = document.getElementsByClassName(`_project-item`);
 
-        let gsapHover = projectItems[i].getElementsByClassName(`gsapHover`)[0]
+    let lastActiveProject = {
+        item: null,
+        displayVideo: null,
+        tagsAnimation: null,
+        titleAnimation: null,
+        displayChatWrapper: null,
+        chatMessagesAnimation: null,
+        chatTpingIndicatorAnimation: null
+    };
 
-        let currentProjectTags = projectItems[i].getElementsByClassName(`_tag`)
-        let currentProjectTitle = projectItems[i].getElementsByClassName(`_title`)[0]
+    function activateProject(currentProjectItem) {
 
-        let currentChatWrapper = projectItems[i].getElementsByClassName(`_chat-wrapper`)[0]
-        let currentChatAnimationStatus;
+        if (lastActiveProject.item == currentProjectItem) return;
 
-        let currentChatMessageIslands = projectItems[i].getElementsByClassName(`_chat-island`)
-        let currentChatTypingIndicator = projectItems[i].getElementsByClassName(`_typing`)[0]
+        let videoID = currentProjectItem.getAttribute(`video-id`)
+        let videoElement = document.getElementById(videoID)
+        let projectTags = currentProjectItem.getElementsByClassName(`_tag`)
+        let projectTitle = currentProjectItem.getElementsByClassName(`_title`)[0]
+        let chatWrapper = currentProjectItem.getElementsByClassName(`_chat-wrapper`)[0]
+        let chatMessageIslands = currentProjectItem.getElementsByClassName(`_chat-island`)
+        let chatTypingIndicator = currentProjectItem.getElementsByClassName(`_typing`)[0]
 
-        ScrollTrigger.matchMedia({
-            "(max-width: 1008px)": function () {
+        lastActiveProject.displayVideo = gsap.to(videoElement, {
+            display: `block`,
+            autoAlpha: .5,
+            duration: 0.3
+        })
 
-                const pointerEnterEvent = new PointerEvent('pointerenter', {
-                    bubbles: true,
-                    cancelable: true,
-                    view: window
+        videoElement.play();
+
+        lastActiveProject.tagsAnimation = gsap.fromTo(Array.from(projectTags), {
+            y: -10,
+            autoAlpha: 0
+        }, {
+            y: 0,
+            stagger: 0.05,
+            autoAlpha: 1,
+            duration: 0.2
+        });
+
+        lastActiveProject.titleAnimation = gsap.to(projectTitle, {
+            autoAlpha: 1,
+            duration: 0.3
+        })
+
+        if (isDesktop == true) {
+
+            let chatAnimationStatus = chatWrapper.getAttribute(`animation-status`)
+
+            if (chatAnimationStatus == `none`) {
+
+                chatWrapper.setAttribute(`animation-status`, `in-progress`);
+
+                lastActiveProject.displayChatWrapper = gsap.fromTo(chatWrapper, {
+                    autoAlpha: 0
+                }, {
+                    autoAlpha: 1,
+                    duration: 0.3
                 });
 
-                const pointerLeaveEvent = new PointerEvent('pointerleave', {
-                    bubbles: true,
-                    cancelable: true,
-                    view: window
-                });
-
-                gsap.to(projectItems[i], {
-                    scrollTrigger: {
-                        trigger: projectItems[i],
-                        start: "top center",
-                        end: "top center",
-                        scrub: true,
-                        markers: true,
-                        onEnter: () => {
-                            gsapHover.dispatchEvent(pointerEnterEvent);
-                        },
-                        onLeave: () => {
-                            gsapHover.dispatchEvent(pointerLeaveEvent);
-                        },
-                        onEnterBack: () => {
-                            gsapHover.dispatchEvent(pointerEnterEvent);
-                        },
-                        onLeaveBack: () => {
-                            gsapHover.dispatchEvent(pointerLeaveEvent);
-                        }
+                lastActiveProject.chatMessagesAnimation = gsap.fromTo(Array.from(chatMessageIslands), {
+                    display: `none`,
+                    autoAlpha: 0
+                }, {
+                    display: `block`,
+                    autoAlpha: 1,
+                    delay: 0.5,
+                    stagger: 1,
+                    onComplete: () => {
+                        chatWrapper.setAttribute(`animation-status`, `done`)
                     }
                 });
-            }
-        })
 
-        gsapHover.addEventListener(`pointerenter`, async () => {
-
-            if (lastProjectItem != projectItems[i]) {
-
-                gsap.to(currentVideoElement, {
-                    display: `block`,
-                    autoAlpha: .5,
-                    duration: 0.3
+                lastActiveProject.chatTpingIndicatorAnimation = gsap.to(chatTypingIndicator, {
+                    autoAlpha: 0,
+                    delay: 2.5,
+                    duration: 0
                 })
 
-                currentVideoElement.play();
-
-                gsap.fromTo(Array.from(currentProjectTags), {
-                    y: -10,
+            } else if (chatAnimationStatus == `done`) {
+                lastActiveProject.displayChatWrapper = gsap.fromTo(chatWrapper, {
                     autoAlpha: 0
                 }, {
-                    y: 0,
-                    stagger: 0.05,
-                    autoAlpha: 1,
-                    duration: 0.2
-                });
-
-                gsap.to(currentProjectTitle, {
-                    autoAlpha: 1,
-                    duration: 0.3
-                })
-
-                gsap.fromTo(currentChatWrapper, {
-                    //x: -32,
-                    autoAlpha: 0
-                }, {
-                    //x: 0,
                     autoAlpha: 1,
                     duration: 0.3
                 });
-
-                currentChatAnimationStatus = currentChatWrapper.getAttribute(`animation-status`)
-
-                if (currentChatAnimationStatus == `none`) {
-
-                    currentChatWrapper.setAttribute(`animation-status`, `in-progress`)
-
-                    currentChatIslandAnimation = gsap.fromTo(currentChatMessageIslands, {
-                        display: `none`,
-                        autoAlpha: 0
-                    }, {
-                        display: `block`,
-                        autoAlpha: 1,
-                        delay: 0.5,
-                        stagger: 1,
-                        onComplete: () => {
-                            currentChatWrapper.setAttribute(`animation-status`, `done`)
-                        }
-                    });
-
-                    currentChatTypingIndicatorAnimation = gsap.to(currentChatTypingIndicator, {
-                        autoAlpha: 0,
-                        delay: 2.5,
-                        duration: 0
-                    })
-
-                }
-
-                if (lastProjectItem != `none`) {
-
-                    let lastVideoId = lastProjectItem.getAttribute(`video-id`)
-                    let lastVideoElement = document.getElementById(lastVideoId)
-
-                    let lastProjectTags = lastProjectItem.getElementsByClassName(`_tag`)
-                    let lastProjectTitle = lastProjectItem.getElementsByClassName(`_title`)[0]
-
-                    let lastChatWrapper = lastProjectItem.getElementsByClassName(`_chat-wrapper`)[0]
-
-                    gsap.to(lastVideoElement, {
-                        display: `none`,
-                        autoAlpha: 0,
-                        duration: 0.3
-                    })
-
-                    lastVideoElement.pause();
-
-                    gsap.to(Array.from(lastProjectTags), {
-                        y: -10,
-                        stagger: 0.05,
-                        autoAlpha: 0,
-                        duration: 0.2
-                    });
-
-                    gsap.to(lastProjectTitle, {
-                        autoAlpha: 0.3,
-                        duration: 0.3
-                    })
-
-                    gsap.to(lastChatWrapper, {
-                        //x: -32,
-                        autoAlpha: 0,
-                        duration: 0.3
-                    });
-                }
             }
-        })
-
-        gsapHover.addEventListener(`pointerleave`, async () => {
-            lastProjectItem = projectItems[i];
-        })
-
+        }
     }
+
+    function deactivateProject(currentProjectItem) {
+
+        if (lastActiveProject.item == currentProjectItem) return;
+
+        if (lastActiveProject.item != null) {
+            lastActiveProject.displayVideo.revert();
+            lastActiveProject.tagsAnimation.revert();
+            lastActiveProject.titleAnimation.revert();
+
+            let videoID = lastActiveProject.item.getAttribute(`video-id`)
+            let videoElement = document.getElementById(videoID)
+
+            videoElement.pause();
+
+            if (isDesktop == true && lastActiveProject.displayChatWrapper) {
+
+                let chatWrapper = lastActiveProject.item.getElementsByClassName(`_chat-wrapper`)[0]
+                let chatAnimationStatus = chatWrapper.getAttribute(`animation-status`)
+
+                if (chatAnimationStatus != `done`) {
+                    chatWrapper.setAttribute(`animation-status`, `none`);
+                    lastActiveProject.displayChatWrapper.revert();
+                    lastActiveProject.chatMessagesAnimation.revert();
+                    lastActiveProject.chatTpingIndicatorAnimation.revert();
+                } else {
+                    lastActiveProject.displayChatWrapper.revert();
+                }
+
+            }
+
+        }
+    }
+
+    Array.from(projectItems).forEach(projectItem => {
+
+        let mm = gsap.matchMedia();
+
+        let pointerEnterEvent = new PointerEvent('pointerenter', {
+            bubbles: true,
+            cancelable: true,
+            view: window
+        });
+
+        mm.add(`(max-width: ${mobileBreakpoint}px)`, () => {
+            gsap.to(projectItem, {
+                scrollTrigger: {
+                    trigger: projectItem,
+                    start: "top center",
+                    end: "top center",
+                    scrub: true,
+
+                    onEnter: () => {
+                        gsapHover.dispatchEvent(pointerEnterEvent);
+                    },
+                    onLeave: () => {
+                        gsapHover.dispatchEvent(pointerEnterEvent);
+                    },
+                    onEnterBack: () => {
+                        gsapHover.dispatchEvent(pointerEnterEvent);
+                    },
+                    onLeaveBack: () => {
+                        gsapHover.dispatchEvent(pointerEnterEvent);
+                    }
+                }
+            });
+        });
+
+        window.addEventListener('switchedToDesktop', () => {
+            deactivateProject(projectItem);
+
+            lastActiveProject = {
+                item: null,
+                displayVideo: null,
+                tagsAnimation: null,
+                titleAnimation: null,
+                displayChatWrapper: null,
+                chatMessagesAnimation: null,
+                chatTpingIndicatorAnimation: null
+            };
+        });
+
+        window.addEventListener('switchedToMobile', () => {
+            deactivateProject(projectItem)
+        });
+
+        let gsapHover = projectItem.getElementsByClassName(`gsapHover`)[0]
+
+        gsapHover.addEventListener(`pointerenter`, () => {
+            deactivateProject(projectItem)
+            activateProject(projectItem)
+            lastActiveProject.item = projectItem;
+        })
+
+    });
 
 }
 
@@ -323,6 +361,9 @@ function createBlob(blobElement, blobContent, hoverElements, blobSize) {
 
     hoverElements.forEach(hoverElement => {
         hoverElement.addEventListener(`pointerenter`, async () => {
+
+            if (!isDesktop) return;
+
             gsap.to(blobState, {
                 active: 1,
                 duration: 0.3
@@ -330,6 +371,9 @@ function createBlob(blobElement, blobContent, hoverElements, blobSize) {
         })
 
         hoverElement.addEventListener(`pointerleave`, async () => {
+
+            if (!isDesktop) return;
+
             gsap.to(blobState, {
                 active: 0,
                 duration: 0.3,
@@ -400,22 +444,356 @@ function createBlob(blobElement, blobContent, hoverElements, blobSize) {
 }
 
 function initBlobs() {
-    let footerBlobElement = document.getElementsByClassName(`_contact-blob`)[0];
-    let footerBlobContent = footerBlobElement.getElementsByClassName(`_content`)[0];
-    let footerHoverElement = document.querySelectorAll(`._contact-cta`);
 
-    createBlob(footerBlobElement, footerBlobContent, footerHoverElement, 180)
+    let footerBlobElement = document.getElementsByClassName(`_contact-blob`)[0];
+    if (footerBlobElement) {
+        let footerBlobContent = footerBlobElement.getElementsByClassName(`_content`)[0];
+        let footerHoverElement = document.querySelectorAll(`._contact-cta`);
+        createBlob(footerBlobElement, footerBlobContent, footerHoverElement, 180)
+    }
+
+    let dragBlobElement = document.getElementsByClassName(`_drag-blob`)[0];
+    if (dragBlobElement) {
+        let dragBlobContent = dragBlobElement.getElementsByClassName(`_blob-content`)[0];
+        let dragHoverElement = document.getElementsByClassName(`cs-int-drag`)[0].querySelectorAll(`._content`);
+        createBlob(dragBlobElement, dragBlobContent, dragHoverElement, 128)
+    }
 
     let projectsBlobElement = document.getElementsByClassName(`_view-project-blob`)[0];
-    let projectsBlobContent = projectsBlobElement.getElementsByClassName(`_content`)[0];
-    let projectsHoverElement = document.querySelectorAll(`.gsapHover`);
+    if (projectsBlobElement) {
+        let projectsBlobContent = projectsBlobElement.getElementsByClassName(`_content`)[0];
+        let projectsHoverElement = document.querySelectorAll(`.gsapHover`);
+        createBlob(projectsBlobElement, projectsBlobContent, projectsHoverElement, 230)
+    }
+}
 
-    createBlob(projectsBlobElement, projectsBlobContent, projectsHoverElement, 230)
+function caseStudyAnimations() {
+
+    let mm = gsap.matchMedia();
+
+    mm.add(`(min-width: ${mobileBreakpoint}px)`, () => {
+
+        let txtMainElements = document.querySelectorAll(".cs-txt-main-left, .cs-txt-main-right");
+
+        if (txtMainElements) {
+
+            Array.from(txtMainElements).forEach(txtMainElement => {
+                let preHeadingParagraph = txtMainElement.querySelectorAll("._pre-heading p")[0]
+                let headingParagraph = txtMainElement.querySelectorAll("._heading p")[0]
+
+                let split = SplitText.create(headingParagraph, {
+                    type: "lines"
+                });
+
+                gsap.from(preHeadingParagraph, {
+                    x: -40,
+                    opacity: 0,
+                    duration: 0.3,
+
+                    scrollTrigger: {
+                        trigger: preHeadingParagraph,
+                        start: 'top 80%',
+                    }
+                })
+
+                gsap.from(split.lines, {
+                    y: 5,
+                    opacity: 0,
+                    duration: 0.3,
+                    stagger: 0.1,
+                    delay: 0.1,
+
+                    scrollTrigger: {
+                        trigger: headingParagraph,
+                        start: 'top 80%',
+                    }
+                })
+            });
+        }
+
+        let figOneFullElements = document.querySelectorAll(".cs-fig-1-full-left, .cs-fig-1-full-right");
+
+        if (figOneFullElements) {
+
+            Array.from(figOneFullElements).forEach(figOneFullElement => {
+                let imageElement = figOneFullElement.querySelectorAll("img, video")[0]
+                let descriptionParagraphs = figOneFullElement.querySelectorAll("._description p")
+
+                gsap.from(imageElement, {
+                    opacity: 0,
+                    scale: 1.2,
+                    duration: .8,
+                    clipPath: `polygon(0 0, 100% 0, 100% 0%, 0 0%)`,
+                    transformOrigin: 'top center',
+                    ease: 'power2.inOut',
+
+                    scrollTrigger: {
+                        trigger: imageElement,
+                        start: '20% 80%',
+                    }
+                })
+
+                if (!descriptionParagraphs) return;
+
+                Array.from(descriptionParagraphs).forEach(descriptionParagraph => {
+                    let split = SplitText.create(descriptionParagraph, {
+                        type: "lines"
+                    });
+
+                    gsap.from(split.lines, {
+                        y: 5,
+                        opacity: 0,
+                        duration: 0.3,
+                        stagger: 0.1,
+
+                        scrollTrigger: {
+                            trigger: descriptionParagraph,
+                            start: 'top 80%',
+                        }
+                    })
+                })
+
+            })
+        }
+
+        let figOneAsymElements = document.querySelectorAll(".cs-fig-1-asym-left, .cs-fig-1-asym-right");
+
+        if (figOneAsymElements) {
+
+            Array.from(figOneAsymElements).forEach(figOneAsymElement => {
+                let imageElement = figOneAsymElement.querySelectorAll("img, video")[0]
+                let descriptionParagraphs = figOneAsymElement.querySelectorAll("._description p")
+
+                gsap.from(imageElement, {
+                    opacity: 0,
+                    scale: 1.2,
+                    duration: .8,
+                    clipPath: `polygon(0 0, 100% 0, 100% 0%, 0 0%)`,
+                    transformOrigin: 'top center',
+                    ease: 'power2.inOut',
+
+                    scrollTrigger: {
+                        trigger: imageElement,
+                        start: '20% 80%',
+                    }
+                })
+
+                if (!descriptionParagraphs) return;
+
+                Array.from(descriptionParagraphs).forEach(descriptionParagraph => {
+                    let split = SplitText.create(descriptionParagraph, {
+                        type: "lines"
+                    });
+
+                    gsap.from(split.lines, {
+                        y: 5,
+                        opacity: 0,
+                        duration: 0.3,
+                        stagger: 0.1,
+
+                        scrollTrigger: {
+                            trigger: descriptionParagraph,
+                            start: 'top 80%',
+                        }
+                    })
+                })
+            })
+        }
+
+        let figOneByOneElements = document.querySelectorAll(".cs-fig-1x1-left, .cs-fig-1x1-right");
+
+        if (figOneByOneElements) {
+            Array.from(figOneByOneElements).forEach(figOneByOneElement => {
+                let imageElement = figOneByOneElement.querySelectorAll("img, video")
+                let descriptionParagraphs = figOneByOneElement.querySelectorAll("._description p")
+
+                gsap.from(Array.from(imageElement), {
+                    opacity: 0,
+                    scale: 1.2,
+                    duration: .8,
+                    clipPath: `polygon(0 0, 100% 0, 100% 0%, 0 0%)`,
+                    transformOrigin: 'top center',
+                    ease: 'power2.inOut',
+                    stagger: 0.3,
+
+                    scrollTrigger: {
+                        trigger: imageElement,
+                        start: '20% 80%',
+                    }
+                })
+
+                if (!descriptionParagraphs) return;
+
+                Array.from(descriptionParagraphs).forEach(descriptionParagraph => {
+                    let split = SplitText.create(descriptionParagraph, {
+                        type: "lines"
+                    });
+
+                    gsap.from(split.lines, {
+                        y: 5,
+                        opacity: 0,
+                        duration: 0.3,
+                        stagger: 0.1,
+
+                        scrollTrigger: {
+                            trigger: descriptionParagraph,
+                            start: 'top 80%',
+                        }
+                    })
+                })
+            })
+        }
+
+        let figOneByOneAsymElements = document.querySelectorAll(".cs-fig-1x1-asym-left, .cs-fig-1x1-asym-right");
+
+        if (figOneByOneAsymElements) {
+            Array.from(figOneByOneAsymElements).forEach(figOneByOneAsymElement => {
+                let imageElement = figOneByOneAsymElement.querySelectorAll("img, video")
+                let descriptionParagraphs = figOneByOneAsymElement.querySelectorAll("._description p")
+
+                gsap.from(Array.from(imageElement), {
+                    opacity: 0,
+                    scale: 1.2,
+                    duration: .8,
+                    clipPath: `polygon(0 0, 100% 0, 100% 0%, 0 0%)`,
+                    transformOrigin: 'top center',
+                    ease: 'power2.inOut',
+                    stagger: 0.3,
+
+                    scrollTrigger: {
+                        trigger: imageElement,
+                        start: '20% 80%',
+                    }
+                })
+
+                if (!descriptionParagraphs) return;
+
+                Array.from(descriptionParagraphs).forEach(descriptionParagraph => {
+                    let split = SplitText.create(descriptionParagraph, {
+                        type: "lines"
+                    });
+
+                    gsap.from(split.lines, {
+                        y: 5,
+                        opacity: 0,
+                        duration: 0.3,
+                        stagger: 0.1,
+
+                        scrollTrigger: {
+                            trigger: descriptionParagraph,
+                            start: 'top 80%',
+                        }
+                    })
+                })
+            })
+        }
+    })
+}
+
+function caseStudySectionCompare() {
+    let compareElements = document.getElementsByClassName(`cs-int-compare`);
+
+    if (compareElements) {
+
+        Array.from(compareElements).forEach(compareElement => {
+            let beforeImage = compareElement.getElementsByClassName(`_before`)[0]
+            let dividerElement = compareElement.getElementsByClassName(`_divider`)[0]
+            let pulsatingCircleElement = compareElement.getElementsByClassName(`_pulsating-circle`)[0]
+
+            let ratio = 0.5;
+
+            let pulseTween = null;
+
+            function startPulse() {
+                if (pulseTween == null) {
+                    pulseTween = gsap.to(pulsatingCircleElement, {
+                        delay: 2,
+                        scale: 1.75,
+                        opacity: 0,
+                        duration: 1.5,
+                        repeat: -1,
+                        repeatDelay: 1,
+                        ease: "power1.inOut"
+                    });
+                }
+            }
+            startPulse()
+
+            function stopPulse() {
+                pulseTween.revert();
+                pulseTween = null;
+            }
+
+            function onDrag() {
+                let width = compareElement.getBoundingClientRect().width;
+                gsap.set(beforeImage, {
+                    clipPath: `inset(0px ${width - draggable.x}px 0px 0px)`
+                });
+                ratio = draggable.x / width;
+
+                if (pulseTween !== null) {
+                    stopPulse()
+                }
+            }
+
+            let draggable = new Draggable(dividerElement, {
+                type: "x",
+                bounds: compareElement,
+                onDrag: onDrag,
+                onThrowUpdate: onDrag,
+                onDragEnd: startPulse,
+                onThrowComplete: startPulse,
+                inertia: true
+            });
+
+            function onResize() {
+                let width = compareElement.getBoundingClientRect().width;
+                let x = ratio * width;
+
+                gsap.set(dividerElement, {
+                    x: x
+                });
+
+                gsap.set(beforeImage, {
+                    clipPath: `inset(0px ${width - x}px 0px 0px)`
+                });
+
+                draggable.update(true);
+            }
+
+            window.addEventListener("resize", onResize);
+            onResize();
+
+        });
+    }
+}
+
+function caseStudySectionDrag() {
+    let dragElements = document.getElementsByClassName(`cs-int-drag`);
+
+    if (dragElements) {
+        Array.from(dragElements).forEach(dragElement => {
+
+            let galleryElement = dragElement.getElementsByClassName(`_gallery`)[0];
+
+            Draggable.create(galleryElement, {
+                type: "x",
+                bounds: {
+                    maxX: 0,
+                    minX: galleryElement.clientWidth - galleryElement.scrollWidth
+                },
+                edgeResistance: 0.65,
+                inertia: true
+            });
+
+        })
+    }
+
 }
 
 barba.init({
     transitions: [{
-        name: 'autoAlpha-transition',
+        name: 'projectTransition',
         async leave(data) {
             const triggeredElement = data.trigger; // the clicked element
 
@@ -424,20 +802,28 @@ barba.init({
             }
         },
         async afterEnter(data) {
-            //await indexToProjectTransitionEnter()
+
         }
     }],
     views: [{
-        namespace: 'home', // optional, if using <body data-barba-namespace="your-namespace">
+        namespace: 'home',
         afterEnter(data) {
-            indexPage();
+            workSection();
             initBlobs();
         }
     }, {
-        namespace: 'project', // optional, if using <body data-barba-namespace="your-namespace">
+        namespace: 'project',
         afterEnter(data) {
             indexToProjectTransitionEnter();
+            console.log(`a rulat indexToProjectTransitionEnter`)
+            caseStudyAnimations()
+            console.log(`a rulat caseStudyAnimations`)
+            caseStudySectionCompare();
+            console.log(`a rulat caseStudySectionCompare`)
+            caseStudySectionDrag();
+            console.log(`a rulat caseStudySectionDrag`)
             initBlobs();
+            console.log(`a rulat initBlobs`)
         }
     }]
 });
