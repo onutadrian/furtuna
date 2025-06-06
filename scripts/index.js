@@ -27,9 +27,9 @@ window.addEventListener('resize', () => {
     }
 });
 
-function workSection() {
+function workSection(container = document) {
 
-    let projectItems = document.getElementsByClassName(`_project-item`);
+    let projectItems = container.getElementsByClassName(`_project-item`);
 
     let lastActiveProject = {
         item: null,
@@ -344,7 +344,7 @@ async function indexToProjectTransitionEnter() {
     })
 }
 
-function createBlob(blobElement, blobContent, hoverElements, blobSize) {
+function createBlob(blobElement, blobContent, hoverElements, blobSize,) {
 
     //blobElement always getElementsByClassName(`x`)[0]
     //blobContent always getElementsByClassName(`x`)[0]
@@ -443,37 +443,39 @@ function createBlob(blobElement, blobContent, hoverElements, blobSize) {
     });
 }
 
-function initBlobs() {
+function initBlobs(container = document) {
 
-    let footerBlobElement = document.getElementsByClassName(`_contact-blob`)[0];
+    let footerBlobElement = container.getElementsByClassName(`_contact-blob`)[0];
     if (footerBlobElement) {
         let footerBlobContent = footerBlobElement.getElementsByClassName(`_content`)[0];
-        let footerHoverElement = document.querySelectorAll(`._contact-cta`);
+        let footerHoverElement = container.querySelectorAll(`._contact-cta`);
         createBlob(footerBlobElement, footerBlobContent, footerHoverElement, 180)
     }
 
-    let dragBlobElement = document.getElementsByClassName(`_drag-blob`)[0];
+    let dragBlobElement = container.getElementsByClassName(`_drag-blob`)[0];
     if (dragBlobElement) {
         let dragBlobContent = dragBlobElement.getElementsByClassName(`_blob-content`)[0];
-        let dragHoverElement = document.getElementsByClassName(`cs-int-drag`)[0].querySelectorAll(`._content`);
+        let dragHoverElement = container.getElementsByClassName(`cs-int-drag`)[0].querySelectorAll(`._content`);
         createBlob(dragBlobElement, dragBlobContent, dragHoverElement, 128)
     }
 
-    let projectsBlobElement = document.getElementsByClassName(`_view-project-blob`)[0];
+    let projectsBlobElement = container.getElementsByClassName(`_view-project-blob`)[0];
     if (projectsBlobElement) {
         let projectsBlobContent = projectsBlobElement.getElementsByClassName(`_content`)[0];
-        let projectsHoverElement = document.querySelectorAll(`.gsapHover`);
+        let projectsHoverElement = container.querySelectorAll(`.gsapHover`);
         createBlob(projectsBlobElement, projectsBlobContent, projectsHoverElement, 230)
     }
 }
 
-function caseStudyAnimations() {
+function caseStudyAnimations(container = document) {
 
     let mm = gsap.matchMedia();
 
     mm.add(`(min-width: ${mobileBreakpoint}px)`, () => {
 
-        let txtMainElements = document.querySelectorAll(".cs-txt-main-left, .cs-txt-main-right");
+        console.log(container)
+
+        let txtMainElements = container.querySelectorAll(".cs-txt-main-left, .cs-txt-main-right");
 
         if (txtMainElements) {
 
@@ -511,7 +513,7 @@ function caseStudyAnimations() {
             });
         }
 
-        let figOneFullElements = document.querySelectorAll(".cs-fig-1-full-left, .cs-fig-1-full-right");
+        let figOneFullElements = container.querySelectorAll(".cs-fig-1-full-left, .cs-fig-1-full-right");
 
         if (figOneFullElements) {
 
@@ -556,7 +558,7 @@ function caseStudyAnimations() {
             })
         }
 
-        let figOneAsymElements = document.querySelectorAll(".cs-fig-1-asym-left, .cs-fig-1-asym-right");
+        let figOneAsymElements = container.querySelectorAll(".cs-fig-1-asym-left, .cs-fig-1-asym-right");
 
         if (figOneAsymElements) {
 
@@ -600,7 +602,7 @@ function caseStudyAnimations() {
             })
         }
 
-        let figOneByOneElements = document.querySelectorAll(".cs-fig-1x1-left, .cs-fig-1x1-right");
+        let figOneByOneElements = container.querySelectorAll(".cs-fig-1x1-left, .cs-fig-1x1-right");
 
         if (figOneByOneElements) {
             Array.from(figOneByOneElements).forEach(figOneByOneElement => {
@@ -644,7 +646,7 @@ function caseStudyAnimations() {
             })
         }
 
-        let figOneByOneAsymElements = document.querySelectorAll(".cs-fig-1x1-asym-left, .cs-fig-1x1-asym-right");
+        let figOneByOneAsymElements = container.querySelectorAll(".cs-fig-1x1-asym-left, .cs-fig-1x1-asym-right");
 
         if (figOneByOneAsymElements) {
             Array.from(figOneByOneAsymElements).forEach(figOneByOneAsymElement => {
@@ -690,8 +692,8 @@ function caseStudyAnimations() {
     })
 }
 
-function caseStudySectionCompare() {
-    let compareElements = document.getElementsByClassName(`cs-int-compare`);
+function caseStudySectionCompare(container = document) {
+    let compareElements = container.getElementsByClassName(`cs-int-compare`);
 
     if (compareElements) {
 
@@ -768,8 +770,8 @@ function caseStudySectionCompare() {
     }
 }
 
-function caseStudySectionDrag() {
-    let dragElements = document.getElementsByClassName(`cs-int-drag`);
+function caseStudySectionDrag(container = document) {
+    let dragElements = container.getElementsByClassName(`cs-int-drag`);
 
     if (dragElements) {
         Array.from(dragElements).forEach(dragElement => {
@@ -792,38 +794,47 @@ function caseStudySectionDrag() {
 }
 
 barba.init({
-    transitions: [{
-        name: 'projectTransition',
-        async leave(data) {
-            const triggeredElement = data.trigger; // the clicked element
+  transitions: [{
+    name: 'projectTransition',
+    async leave(data) {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      const triggeredElement = data.trigger;
+      if (triggeredElement) {
+        await indexToProjectTransitionLeave(triggeredElement);
+      }
+    }
+  }],
+  views: [
+    {
+      namespace: 'home',
+      beforeEnter(data) {
+        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+        workSection(data.next.container);
+        initBlobs(data.next.container);
 
-            if (triggeredElement) {
-                await indexToProjectTransitionLeave(triggeredElement)
-            }
-        },
-        async afterEnter(data) {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            ScrollTrigger.refresh();
+          });
+        });
+      }
+    },
+    {
+      namespace: 'project',
+      afterEnter(data) {
+        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+        indexToProjectTransitionEnter();
+        caseStudyAnimations(data.next.container);
+        caseStudySectionCompare(data.next.container);
+        caseStudySectionDrag(data.next.container);
+        initBlobs(data.next.container);
 
-        }
-    }],
-    views: [{
-        namespace: 'home',
-        afterEnter(data) {
-            workSection();
-            initBlobs();
-        }
-    }, {
-        namespace: 'project',
-        afterEnter(data) {
-            indexToProjectTransitionEnter();
-            console.log(`a rulat indexToProjectTransitionEnter`)
-            caseStudyAnimations()
-            console.log(`a rulat caseStudyAnimations`)
-            caseStudySectionCompare();
-            console.log(`a rulat caseStudySectionCompare`)
-            caseStudySectionDrag();
-            console.log(`a rulat caseStudySectionDrag`)
-            initBlobs();
-            console.log(`a rulat initBlobs`)
-        }
-    }]
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            ScrollTrigger.refresh();
+          });
+        });
+      }
+    }
+  ]
 });
