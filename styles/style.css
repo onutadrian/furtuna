@@ -459,6 +459,7 @@
   flex-direction: column;
   gap: 1.5rem;
   flex: 1;
+  overflow: hidden;
 }
 .cs-fig-1x2-asym-left ._content ._images ._left ._wrapper img,
 .cs-fig-1x2-asym-left ._content ._images ._left ._wrapper video,
@@ -468,6 +469,8 @@
   height: 100%;
   -o-object-fit: cover;
      object-fit: cover;
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+          clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
 }
 .cs-fig-1x2-asym-left ._content ._description {
   margin-top: 2rem;
@@ -510,6 +513,7 @@
   flex-direction: column;
   gap: 1.5rem;
   flex: 1;
+  overflow: hidden;
 }
 .cs-fig-1x2-asym-right ._content ._images ._left ._wrapper img,
 .cs-fig-1x2-asym-right ._content ._images ._left ._wrapper video,
@@ -519,6 +523,8 @@
   height: 100%;
   -o-object-fit: cover;
      object-fit: cover;
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+          clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
 }
 .cs-fig-1x2-asym-right ._content ._description {
   margin-top: 2rem;
@@ -647,7 +653,8 @@
 .cs-int-drag {
   margin-bottom: 10rem;
   grid-column: 1/19;
-  max-height: 100vh;
+  height: 100vh;
+  min-height: 48rem;
 }
 .cs-int-drag ._drag-blob {
   position: fixed;
@@ -687,7 +694,7 @@
   overflow: hidden;
   height: 100%;
   background: #E3E6EA;
-  padding: 1.5rem;
+  padding: 1.5rem 3rem;
 }
 .cs-int-drag ._content ._gallery {
   height: 100%;
@@ -841,7 +848,7 @@
   .cs-fig-1x1-left ._content ._images ._wrapper img,
   .cs-fig-1x1-left ._content ._images ._wrapper video {
     height: auto;
-    max-width: 100%;
+    width: 100%;
   }
   .cs-fig-1x1-left ._content ._description {
     margin-top: 2rem;
@@ -875,7 +882,7 @@
   .cs-fig-1x1-right ._content ._images ._wrapper img,
   .cs-fig-1x1-right ._content ._images ._wrapper video {
     height: auto;
-    max-width: 100%;
+    width: 100%;
   }
   .cs-fig-1x1-right ._content ._description {
     margin-top: 2rem;

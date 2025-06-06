@@ -367,12 +367,14 @@
                     flex-direction: column;
                     gap: $sp24;
                     flex: 1;
+                    overflow: hidden;
 
                     img,
                     video {
                         width: 100%;
                         height: 100%;
                         object-fit: cover;
+                        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
                     }
                 }
             }
@@ -519,7 +521,8 @@
 .cs-int-drag {
     margin-bottom: $sp160;
     grid-column: 1 / 19;
-    max-height: 100vh;
+    height: 100vh;
+    min-height: 48rem;
 
     ._drag-blob {
         position: fixed;
@@ -558,7 +561,7 @@
         overflow: hidden;
         height: 100%;
         background: #E3E6EA;
-        padding: $sp24;
+        padding: $sp24 $sp48;
 
         ._gallery {
             height: 100%;
@@ -706,7 +709,7 @@
                     img,
                     video {
                         height: auto;
-                        max-width: 100%;
+                        width: 100%;
                     }
                 }
 

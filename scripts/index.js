@@ -344,7 +344,7 @@ async function indexToProjectTransitionEnter() {
     })
 }
 
-function createBlob(blobElement, blobContent, hoverElements, blobSize,) {
+function createBlob(blobElement, blobContent, hoverElements, blobSize, ) {
 
     //blobElement always getElementsByClassName(`x`)[0]
     //blobContent always getElementsByClassName(`x`)[0]
@@ -473,8 +473,6 @@ function caseStudyAnimations(container = document) {
 
     mm.add(`(min-width: ${mobileBreakpoint}px)`, () => {
 
-        console.log(container)
-
         let txtMainElements = container.querySelectorAll(".cs-txt-main-left, .cs-txt-main-right");
 
         if (txtMainElements) {
@@ -518,19 +516,24 @@ function caseStudyAnimations(container = document) {
         if (figOneFullElements) {
 
             Array.from(figOneFullElements).forEach(figOneFullElement => {
-                let imageElement = figOneFullElement.querySelectorAll("img, video")[0]
+                let visualElement = figOneFullElement.querySelectorAll("img, video")[0]
                 let descriptionParagraphs = figOneFullElement.querySelectorAll("._description p")
 
-                gsap.from(imageElement, {
+                gsap.from(visualElement, {
                     opacity: 0,
                     scale: 1.2,
                     duration: .8,
                     clipPath: `polygon(0 0, 100% 0, 100% 0%, 0 0%)`,
                     transformOrigin: 'top center',
                     ease: 'power2.inOut',
+                    onComplete: () => {
+                        if (visualElement.tagName == `VIDEO`) {
+                            visualElement.play();
+                        }
+                    },
 
                     scrollTrigger: {
-                        trigger: imageElement,
+                        trigger: visualElement,
                         start: '20% 80%',
                     }
                 })
@@ -563,19 +566,24 @@ function caseStudyAnimations(container = document) {
         if (figOneAsymElements) {
 
             Array.from(figOneAsymElements).forEach(figOneAsymElement => {
-                let imageElement = figOneAsymElement.querySelectorAll("img, video")[0]
+                let visualElement = figOneAsymElement.querySelectorAll("img, video")[0]
                 let descriptionParagraphs = figOneAsymElement.querySelectorAll("._description p")
 
-                gsap.from(imageElement, {
+                gsap.from(visualElement, {
                     opacity: 0,
                     scale: 1.2,
                     duration: .8,
                     clipPath: `polygon(0 0, 100% 0, 100% 0%, 0 0%)`,
                     transformOrigin: 'top center',
                     ease: 'power2.inOut',
+                    onComplete: () => {
+                        if (visualElement.tagName == `VIDEO`) {
+                            visualElement.play();
+                        }
+                    },
 
                     scrollTrigger: {
-                        trigger: imageElement,
+                        trigger: visualElement,
                         start: '20% 80%',
                     }
                 })
@@ -606,22 +614,28 @@ function caseStudyAnimations(container = document) {
 
         if (figOneByOneElements) {
             Array.from(figOneByOneElements).forEach(figOneByOneElement => {
-                let imageElement = figOneByOneElement.querySelectorAll("img, video")
+                let visualElements = figOneByOneElement.querySelectorAll("img, video")
                 let descriptionParagraphs = figOneByOneElement.querySelectorAll("._description p")
 
-                gsap.from(Array.from(imageElement), {
-                    opacity: 0,
-                    scale: 1.2,
-                    duration: .8,
-                    clipPath: `polygon(0 0, 100% 0, 100% 0%, 0 0%)`,
-                    transformOrigin: 'top center',
-                    ease: 'power2.inOut',
-                    stagger: 0.3,
+                Array.from(visualElements).forEach(visualElement => {
+                    gsap.from(visualElement, {
+                        opacity: 0,
+                        scale: 1.2,
+                        duration: .8,
+                        clipPath: `polygon(0 0, 100% 0, 100% 0%, 0 0%)`,
+                        transformOrigin: 'top center',
+                        ease: 'power2.inOut',
+                        onComplete: () => {
+                            if (visualElement.tagName == `VIDEO`) {
+                                visualElement.play();
+                            }
+                        },
 
-                    scrollTrigger: {
-                        trigger: imageElement,
-                        start: '20% 80%',
-                    }
+                        scrollTrigger: {
+                            trigger: visualElement,
+                            start: '20% 80%',
+                        }
+                    })
                 })
 
                 if (!descriptionParagraphs) return;
@@ -650,23 +664,30 @@ function caseStudyAnimations(container = document) {
 
         if (figOneByOneAsymElements) {
             Array.from(figOneByOneAsymElements).forEach(figOneByOneAsymElement => {
-                let imageElement = figOneByOneAsymElement.querySelectorAll("img, video")
+                let visualElements = figOneByOneAsymElement.querySelectorAll("img, video")
                 let descriptionParagraphs = figOneByOneAsymElement.querySelectorAll("._description p")
 
-                gsap.from(Array.from(imageElement), {
-                    opacity: 0,
-                    scale: 1.2,
-                    duration: .8,
-                    clipPath: `polygon(0 0, 100% 0, 100% 0%, 0 0%)`,
-                    transformOrigin: 'top center',
-                    ease: 'power2.inOut',
-                    stagger: 0.3,
-
-                    scrollTrigger: {
-                        trigger: imageElement,
-                        start: '20% 80%',
-                    }
+                Array.from(visualElements).forEach(visualElement => {
+                    gsap.from(visualElement, {
+                        opacity: 0,
+                        scale: 1.2,
+                        duration: .8,
+                        clipPath: `polygon(0 0, 100% 0, 100% 0%, 0 0%)`,
+                        transformOrigin: 'top center',
+                        ease: 'power2.inOut',
+                        onComplete: () => {
+                            if (visualElement.tagName == `VIDEO`) {
+                                visualElement.play();
+                            }
+                        },
+                        scrollTrigger: {
+                            trigger: visualElement,
+                            start: '20% 80%',
+                        }
+                    })
                 })
+
+
 
                 if (!descriptionParagraphs) return;
 
@@ -689,6 +710,58 @@ function caseStudyAnimations(container = document) {
                 })
             })
         }
+
+        let figOneByTwoAsymElements = container.querySelectorAll(".cs-fig-1x2-asym-left, .cs-fig-1x2-asym-right");
+
+        if (figOneByTwoAsymElements) {
+            Array.from(figOneByTwoAsymElements).forEach(figOneByTwoAsymElement => {
+                let visualElements = figOneByTwoAsymElement.querySelectorAll("img, video")
+                let descriptionParagraphs = figOneByTwoAsymElement.querySelectorAll("._description p")
+
+                Array.from(visualElements).forEach(visualElement => {
+                    gsap.from(visualElement, {
+                        opacity: 0,
+                        scale: 1.2,
+                        duration: .8,
+                        clipPath: `polygon(0 0, 100% 0, 100% 0%, 0 0%)`,
+                        transformOrigin: 'top center',
+                        ease: 'power2.inOut',
+                        onComplete: () => {
+                            if (visualElement.tagName == `VIDEO`) {
+                                visualElement.play();
+                            }
+                        },
+                        scrollTrigger: {
+                            trigger: visualElement,
+                            start: '20% 80%',
+                        }
+                    })
+                })
+
+
+
+                if (!descriptionParagraphs) return;
+
+                Array.from(descriptionParagraphs).forEach(descriptionParagraph => {
+                    let split = SplitText.create(descriptionParagraph, {
+                        type: "lines"
+                    });
+
+                    gsap.from(split.lines, {
+                        y: 5,
+                        opacity: 0,
+                        duration: 0.3,
+                        stagger: 0.1,
+
+                        scrollTrigger: {
+                            trigger: descriptionParagraph,
+                            start: 'top 80%',
+                        }
+                    })
+                })
+            })
+        }
+
     })
 }
 
@@ -794,47 +867,46 @@ function caseStudySectionDrag(container = document) {
 }
 
 barba.init({
-  transitions: [{
-    name: 'projectTransition',
-    async leave(data) {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-      const triggeredElement = data.trigger;
-      if (triggeredElement) {
-        await indexToProjectTransitionLeave(triggeredElement);
-      }
-    }
-  }],
-  views: [
-    {
-      namespace: 'home',
-      beforeEnter(data) {
-        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-        workSection(data.next.container);
-        initBlobs(data.next.container);
+    transitions: [{
+        name: 'projectTransition',
+        async leave(data) {
+            ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+            const triggeredElement = data.trigger;
+            if (triggeredElement) {
+                await indexToProjectTransitionLeave(triggeredElement);
+            }
+        }
+    }],
+    views: [{
+            namespace: 'home',
+            beforeEnter(data) {
+                ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+                workSection(data.next.container);
+                initBlobs(data.next.container);
 
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            ScrollTrigger.refresh();
-          });
-        });
-      }
-    },
-    {
-      namespace: 'project',
-      afterEnter(data) {
-        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-        indexToProjectTransitionEnter();
-        caseStudyAnimations(data.next.container);
-        caseStudySectionCompare(data.next.container);
-        caseStudySectionDrag(data.next.container);
-        initBlobs(data.next.container);
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        ScrollTrigger.refresh();
+                    });
+                });
+            }
+        },
+        {
+            namespace: 'project',
+            afterEnter(data) {
+                ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+                indexToProjectTransitionEnter();
+                caseStudyAnimations(data.next.container);
+                caseStudySectionCompare(data.next.container);
+                caseStudySectionDrag(data.next.container);
+                initBlobs(data.next.container);
 
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            ScrollTrigger.refresh();
-          });
-        });
-      }
-    }
-  ]
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        ScrollTrigger.refresh();
+                    });
+                });
+            }
+        }
+    ]
 });
