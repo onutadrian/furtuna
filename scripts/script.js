@@ -235,74 +235,10 @@ function cookiesConsent(container = document) {
     }
 }
 
-function pageReveal() {
-    let pageReveal = document.querySelector(`.page-reveal`)
-
-    if (!pageReveal) {
-        return;
-    }
-
-    lenis.stop()
-
-    let topPart = pageReveal.querySelector(`._top`)
-    let bottomPart = pageReveal.querySelector(`._bottom`)
-
-    let progressElement = topPart.querySelector(`._progress`)
-    let currentProgressElement = progressElement.querySelector(`._current`)
-
-    let logoElement = pageReveal.querySelector(`._logo`)
-    let textElement = pageReveal.querySelector(`._text`)
-
-    let animationTimeline = gsap.timeline()
-
-    animationTimeline.fromTo(logoElement, {
-            y: -24,
-            autoAlpha: 0
-        }, {
-            y: 0,
-            autoAlpha: 1,
-            duration: 0.6,
-            delay: 0.4
-        })
-        .fromTo(textElement, {
-            y: 24,
-            autoAlpha: 0
-        }, {
-            y: 0,
-            autoAlpha: 1,
-        }, `<`)
-        .to(topPart, {
-            y: `-100%`,
-            duration: 1.2,
-            ease: `power3.inOut`,
-            delay: 2.5
-        })
-        .to(bottomPart, {
-            y: `100%`,
-            duration: 1.2,
-            ease: `power3.inOut`,
-            onComplete: () => {
-                gsap.to(pageReveal, {
-                    display: `none`,
-                })
-            },
-        }, `<`)
-        .to(logoElement, {
-            autoAlpha: 0,
-            duration: 0.2
-        }, "<-=0.4")
-        .to(textElement, {
-            autoAlpha: 0,
-            duration: 0.2,
-            onComplete: () => {
-                lenis.start()
-            }
-        }, "<")
-
-    let homeHero = document.querySelector(`.homepage-hero`)
+function homeHeroIntro(container = document) {
+    let homeHero = container.querySelector(`.homepage-hero`)
 
     if (homeHero) {
-        let homeHeroPreheading = homeHero.querySelector(`._pre-heading`)
         let homeHeroHeading = homeHero.querySelector(`._heading`)
 
         let headingSplit = SplitText.create(homeHeroHeading, {
@@ -311,27 +247,15 @@ function pageReveal() {
             smartWrap: true
         });
 
-        animationTimeline.from(headingSplit.chars, {
+        gsap.from(headingSplit.chars, {
             y: `-110%`,
             autoAlpha: 0,
             duration: 1.4,
             stagger: 0.02,
             ease: `power3.inOut`,
-        }, `<+=0.6`)
+            onComplete: () => headingSplit.revert()
+        })
     }
-
-    gsap.to(currentProgressElement, {
-        width: `100%`,
-        duration: animationTimeline.duration() - 2.4,
-        ease: `linear`
-    })
-
-    gsap.to(currentProgressElement, {
-        autoAlpha: 0,
-        delay: animationTimeline.duration() - 2.6,
-        duration: 0.3
-    })
-
 }
 
 function projectsSection(container = document) {
@@ -342,8 +266,14 @@ function projectsSection(container = document) {
     let homepageHeroElement = container.querySelector(`.homepage-hero`)
 
     let projectsSectionElement = container.querySelector(`.projects-section`)
+    if (!projectsSectionElement) return;
+
     let stickyWarpperElement = projectsSectionElement.querySelector(`._sticky-wrapper`)
     let projectsWrapperElement = container.querySelector(`._projects-wrapper`)
+
+    if (!stickyWarpperElement || !projectsWrapperElement || !headerWrapperElement || !homepageHeroElement) {
+        return;
+    }
 
     let projectItemElements = projectsWrapperElement.querySelectorAll(`._project-item`);
 
@@ -1321,35 +1251,14 @@ async function caseStudySectionDrag(container = document) {
     }
 }
 
-async function indexToProjectTransitionLeave(trigger) {
-    if (!trigger.hasAttribute(`video-id`)) {
-        return
-    };
+function resetProjectViewportTransition() {
+    const transitionWrapper = document.querySelector(`.video-transition-wrapper`);
+    if (!transitionWrapper) return;
 
-    isScrollProgrammatic = false;
-
-    let videoID = trigger.getAttribute(`video-id`);
-    let videoElement = document.querySelector(`#${videoID}`);
-
-    let transitionWrapper = document.querySelector(`.video-transition-wrapper`);
-
-    let state = Flip.getState(videoElement)
-
-    transitionWrapper.appendChild(videoElement)
-
-    gsap.to(transitionWrapper, {
-        display: `block`,
-        autoAlpha: 1,
-        duration: 0
-    })
-
-    Flip.from(state, {
-        duration: 0.0
-    })
-
-    await gsap.to(videoElement, {
-        autoAlpha: 1,
-        duration: 0.3
+    transitionWrapper.innerHTML = ``;
+    gsap.set(transitionWrapper, {
+        autoAlpha: 0,
+        display: `none`
     });
 }
 
@@ -1465,20 +1374,37 @@ function capabilitiesOverlay(container = document) {
 }
 
 let mobileMenuOpen = false;
+let headerScrollListener = null;
 
 function headerScrollAnimation(container = document) {
 
     let headerWrapperElement = container.querySelector(`.header-wrapper`)
+    if (!headerWrapperElement) return;
+
+    if (headerScrollListener) {
+        window.removeEventListener(`scroll`, headerScrollListener);
+        headerScrollListener = null;
+    }
+
+    let isHeaderEntering = false;
 
     let headerAnimation = gsap.from(headerWrapperElement, {
         yPercent: -100,
         paused: true,
-        duration: 0.3
+        duration: 0.3,
+        immediateRender: false
     }).progress(1);
+
+    gsap.set(headerWrapperElement, {
+        autoAlpha: 1,
+        yPercent: 0
+    });
 
     let lastDirection = null;
 
-    window.addEventListener(`scroll`, () => {
+    headerScrollListener = () => {
+        if (isHeaderEntering || isScrollProgrammatic || scrollDirection == null) return;
+
         if (scrollDirection != lastDirection) {
             lastDirection = scrollDirection;
 
@@ -1488,7 +1414,9 @@ function headerScrollAnimation(container = document) {
                 headerAnimation.play()
             }
         }
-    })
+    };
+
+    window.addEventListener(`scroll`, headerScrollListener)
 }
 
 function toggleMobileMenu(container = document) {
@@ -1496,11 +1424,14 @@ function toggleMobileMenu(container = document) {
     let mobileMenuElement = container.querySelector(`.mobile-menu`)
 
     let menuItems = container.querySelectorAll(`.mobile-menu li`)
+    let isRomanian = document.documentElement.lang === `ro`;
+    let menuLabel = isRomanian ? `MENIU` : `MENU`;
+    let closeLabel = isRomanian ? `ÎNCHIDE` : `CLOSE`;
 
     function openMenu() {
         lenis.stop()
         mobileMenuOpen = true;
-        mobileMenuToggleButton.innerHTML = `CLOSE`
+        mobileMenuToggleButton.innerHTML = closeLabel
 
         gsap.to(mobileMenuElement, {
             x: `0%`,
@@ -1512,7 +1443,7 @@ function toggleMobileMenu(container = document) {
     function closeMenu() {
         lenis.start()
         mobileMenuOpen = false;
-        mobileMenuToggleButton.innerHTML = `MENU`
+        mobileMenuToggleButton.innerHTML = menuLabel
 
         gsap.to(mobileMenuElement, {
             x: `100%`,
@@ -1542,107 +1473,127 @@ function toggleMobileMenu(container = document) {
     })
 }
 
-async function indexToProjectTransitionEnter(container = document) {
-
-    let transitionWrapper = document.getElementsByClassName(`video-transition-wrapper`)[0];
-
+async function projectPageEnter(container = document) {
+    let headerWrapperElement = container.querySelector(`.header-wrapper`)
     let nextProjectWrapperElement = container.querySelector(`.next-project-wrapper`)
+    let projectHero = container.querySelector(`.project-hero`)
 
-    if (!transitionWrapper || !transitionWrapper.hasChildNodes()) {
-
-        lenis.scrollTo(100, {
-            immediate: true,
-            onComplete: () => {
-                lenis.scrollTo(0, {
-
-                })
-            }
-        })
-
-        gsap.to(nextProjectWrapperElement, {
+    function revealProjectHeader() {
+        if (!headerWrapperElement) return;
+        gsap.killTweensOf(headerWrapperElement);
+        gsap.to(headerWrapperElement, {
+            y: 0,
             autoAlpha: 1,
-            duration: 0
-        })
+            duration: 0.45,
+            ease: `power3.out`,
+            overwrite: `auto`,
+            onComplete: () => {
+                gsap.set(headerWrapperElement, {
+                    y: 0,
+                    yPercent: 0,
+                    autoAlpha: 1,
+                    clearProps: `transform`
+                });
+            }
+        });
+    }
 
+    if (headerWrapperElement) {
+        gsap.killTweensOf(headerWrapperElement);
+        gsap.set(headerWrapperElement, {
+            y: -72,
+            autoAlpha: 0
+        });
+    }
+
+    if (nextProjectWrapperElement) {
+        gsap.set(nextProjectWrapperElement, {
+            autoAlpha: 0
+        });
+    }
+
+    if (!projectHero) {
+        revealProjectHeader();
         return;
     }
 
-    let videoFromTransition = transitionWrapper.getElementsByTagName(`video`)[0];
-    let projectHero = document.getElementsByClassName(`project-hero`)[0]
-    let videoWrapper = projectHero.getElementsByClassName(`_video-wrapper`)[0]
-    let inPageVideo = videoWrapper.getElementsByTagName(`video`)[0]
-    let projectTitle = projectHero.getElementsByClassName(`_title`)[0]
-    let projectMetaWrappers = projectHero.getElementsByClassName(`_meta-wrapper`)
+    let videoWrapper = projectHero.querySelector(`._video-wrapper`)
+    let projectTitle = projectHero.querySelector(`._top ._title`)
+    let projectMetaWrappers = projectHero.querySelectorAll(`._meta-wrapper`)
+    let projectMetaTextWrappers = Array.from(projectHero.querySelectorAll(`._project-metas .text-wrapper`))
+        .filter(el => el !== projectTitle)
 
-    inPageVideo.remove();
-    await sleep(500)
+    if (videoWrapper) {
+        gsap.set(videoWrapper, {
+            autoAlpha: 1
+        });
+    }
 
-    gsap.to(videoFromTransition, {
-        autoAlpha: 1,
-        duration: 0
-    });
-
-    gsap.to(projectTitle, {
-        autoAlpha: 0,
-        duration: 0
-    })
-
-    gsap.to(Array.from(projectMetaWrappers), {
-        autoAlpha: 0,
-        duration: 0
-    })
-
-    await sleep(500);
-
+    isScrollProgrammatic = true;
     lenis.scrollTo(0, {
-        duration: 0.8,
-        easing: t => Math.sin((t * Math.PI) / 2),
+        immediate: true,
         onComplete: () => {
-
+            isScrollProgrammatic = false;
         }
     })
+    resetProjectViewportTransition();
 
-    videoFromTransition.parentNode.insertBefore(videoWrapper, videoFromTransition);
-    videoWrapper.appendChild(videoFromTransition)
-
-    let state = Flip.getState(videoWrapper)
-
-    projectHero.appendChild(videoWrapper)
-
-    gsap.to(transitionWrapper, {
-        autoAlpha: 0,
-        duration: 0
-    })
+    revealProjectHeader();
 
     gsap.fromTo(projectTitle, {
-        y: 24
+        y: 20,
+        autoAlpha: 0
     }, {
         y: 0,
         autoAlpha: 1,
         duration: 0.3,
-        delay: 0.8
+        ease: `power3.out`
     })
 
     gsap.fromTo(Array.from(projectMetaWrappers), {
-        y: 24
+        y: 18,
+        autoAlpha: 0
     }, {
         y: 0,
         autoAlpha: 1,
-        duration: 0.3,
-        stagger: 0.1,
-        delay: 0.9
+        duration: 0.28,
+        stagger: 0.08,
+        ease: `power3.out`,
+        delay: 0.3
     })
 
-    await Flip.from(state, {
-        duration: 1,
-        ease: "power2.inOut"
+    gsap.from(projectMetaTextWrappers, {
+        y: 8,
+        duration: 0.22,
+        stagger: 0.02,
+        ease: `power3.out`,
+        delay: 0.34,
+        immediateRender: false
     })
 
-    gsap.to(nextProjectWrapperElement, {
-        autoAlpha: 1,
-        duration: 0.3
-    })
+    if (nextProjectWrapperElement) {
+        gsap.to(nextProjectWrapperElement, {
+            autoAlpha: 1,
+            duration: 0.3
+        })
+    }
 
+}
+
+function homeHeaderTheme(container = document) {
+    let headerWrapperElement = container.querySelector(`.header-wrapper--home`)
+    let heroElement = container.querySelector(`.home-hero`)
+
+    if (!headerWrapperElement || !heroElement) return;
+
+    headerWrapperElement.classList.remove(`is-light`);
+
+    ScrollTrigger.create({
+        trigger: heroElement,
+        start: `bottom top+=88`,
+        onEnter: () => headerWrapperElement.classList.add(`is-light`),
+        onLeaveBack: () => headerWrapperElement.classList.remove(`is-light`)
+    });
 }
 
 function workPage(container = document) {
@@ -1798,160 +1749,205 @@ function playgroundPage(container = document) {
 
 }
 
-barba.init({
-    transitions: [{
-        name: 'projectTransition',
-        async leave(data) {
-            ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+async function runViewInitializers(namespace, container) {
+    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
 
-            const triggeredElement = data.trigger;
-            if (triggeredElement) {
-                await indexToProjectTransitionLeave(triggeredElement);
-            }
-        }
-    }],
-    views: [{
-            namespace: 'home',
-            async afterEnter(data) {
-                ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    switch (namespace) {
+        case 'home':
+            cookiesConsent(container)
+            headerScrollAnimation(container)
+            homeHeaderTheme(container)
+            toggleMobileMenu(container)
+            textAnimations(container)
+            initBlobs(container)
+            homeHeroIntro(container)
+            projectsSection(container)
+            becauseWeAnimation(container)
+            testimonialsSection(container)
 
-                cookiesConsent(data.next.container)
-                headerScrollAnimation(data.next.container)
-                toggleMobileMenu(data.next.container)
-                textAnimations(data.next.container)
-                initBlobs(data.next.container)
-                pageReveal(data.next.container)
-                projectsSection(data.next.container)
-                becauseWeAnimation(data.next.container)
-                testimonialsSection(data.next.container)
-
+            requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        ScrollTrigger.refresh();
-                    });
+                    ScrollTrigger.refresh();
                 });
+            });
 
-                isScrollProgrammatic = true;
+            isScrollProgrammatic = true;
 
-                lenis.scrollTo(0, {
-                    immediate: true,
-                    onComplete: () => {
-                        isScrollProgrammatic = false;
-                    }
-                })
+            lenis.scrollTo(0, {
+                immediate: true,
+                onComplete: () => {
+                    isScrollProgrammatic = false;
+                }
+            })
+            break;
+
+        case 'project':
+            cookiesConsent(container)
+            if (headerScrollListener) {
+                window.removeEventListener(`scroll`, headerScrollListener);
+                headerScrollListener = null;
             }
-        },
-        {
-            namespace: 'project',
-            afterEnter(data) {
-                ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+            toggleMobileMenu(container)
+            await projectPageEnter(container);
+            initBlobs(container);
 
-                cookiesConsent(data.next.container)
-                headerScrollAnimation(data.next.container);
-                toggleMobileMenu(data.next.container)
-                indexToProjectTransitionEnter(data.next.container);
-                initBlobs(data.next.container);
+            caseStudyAnimations(container);
+            caseStudySectionCompare(container);
+            caseStudySectionDrag(container);
+            caseStudyProgressBar(container)
 
-                caseStudyAnimations(data.next.container);
-                caseStudySectionCompare(data.next.container);
-                caseStudySectionDrag(data.next.container);
-                caseStudyProgressBar(data.next.container)
-
+            requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        ScrollTrigger.refresh();
-                    });
+                    ScrollTrigger.refresh();
                 });
-            }
-        }, ,
-        {
-            namespace: 'allWork',
-            async afterEnter(data) {
-                ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+            });
+            break;
 
-                cookiesConsent(data.next.container)
-                headerScrollAnimation(data.next.container);
-                toggleMobileMenu(data.next.container)
-                initBlobs(data.next.container);
+        case 'allWork':
+            cookiesConsent(container)
+            headerScrollAnimation(container);
+            toggleMobileMenu(container)
+            initBlobs(container);
+            workPage(container);
 
-                workPage(data.next.container);
-
+            requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        ScrollTrigger.refresh();
-                    });
+                    ScrollTrigger.refresh();
                 });
+            });
 
-                await sleep(500)
+            await sleep(500)
 
-                isScrollProgrammatic = true;
+            isScrollProgrammatic = true;
+            lenis.scrollTo(0, {
+                immediate: true,
+                onComplete: () => {
+                    isScrollProgrammatic = false;
+                }
+            })
+            break;
 
-                lenis.scrollTo(0, {
-                    immediate: true,
-                    onComplete: () => {
-                        isScrollProgrammatic = false;
-                    }
-                })
-            }
-        },
-        {
-            namespace: `capabilities`,
-            async afterEnter(data) {
-                ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+        case 'capabilities':
+            cookiesConsent(container)
+            headerScrollAnimation(container)
+            toggleMobileMenu(container)
+            initBlobs(container);
+            capabilitiesOverlay(container)
 
-                cookiesConsent(data.next.container)
-                headerScrollAnimation(data.next.container)
-                toggleMobileMenu(data.next.container)
-                initBlobs(data.next.container);
-                capabilitiesOverlay(data.next.container)
-
+            requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        ScrollTrigger.refresh();
-                    });
+                    ScrollTrigger.refresh();
                 });
+            });
 
-                await sleep(500)
+            await sleep(500)
 
-                isScrollProgrammatic = true;
+            isScrollProgrammatic = true;
+            lenis.scrollTo(0, {
+                immediate: true,
+                onComplete: () => {
+                    isScrollProgrammatic = false;
+                }
+            })
+            break;
 
-                lenis.scrollTo(0, {
-                    immediate: true,
-                    onComplete: () => {
-                        isScrollProgrammatic = false;
-                    }
-                })
-            }
-        },
-        {
-            namespace: 'playground',
-            async afterEnter(data) {
-                ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+        case 'playground':
+            cookiesConsent(container)
+            headerScrollAnimation(container);
+            toggleMobileMenu(container)
+            initBlobs(container);
+            playgroundPage(container);
 
-                cookiesConsent(data.next.container)
-                headerScrollAnimation(data.next.container);
-                toggleMobileMenu(data.next.container)
-                initBlobs(data.next.container);
-
-                playgroundPage(data.next.container);
-
+            requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        ScrollTrigger.refresh();
-                    });
+                    ScrollTrigger.refresh();
                 });
+            });
 
-                await sleep(500)
+            await sleep(500)
 
-                isScrollProgrammatic = true;
+            isScrollProgrammatic = true;
+            lenis.scrollTo(0, {
+                immediate: true,
+                onComplete: () => {
+                    isScrollProgrammatic = false;
+                }
+            })
+            break;
 
-                lenis.scrollTo(0, {
-                    immediate: true,
-                    onComplete: () => {
-                        isScrollProgrammatic = false;
-                    }
-                })
+        case 'resume':
+            cookiesConsent(container)
+            headerScrollAnimation(container);
+            toggleMobileMenu(container)
+            initBlobs(container);
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    ScrollTrigger.refresh();
+                });
+            });
+
+            isScrollProgrammatic = true;
+            lenis.scrollTo(0, {
+                immediate: true,
+                onComplete: () => {
+                    isScrollProgrammatic = false;
+                }
+            })
+            break;
+    }
+}
+
+if (window.location.protocol === 'file:') {
+    // Barba uses XHR/fetch and cannot navigate between file:// pages due browser CORS restrictions.
+    const container = document.querySelector(`[data-barba="container"]`) || document;
+    const namespace = container.getAttribute(`data-barba-namespace`);
+    runViewInitializers(namespace, container);
+} else {
+    barba.init({
+        transitions: [{
+            name: 'defaultTransition',
+            leave() {
+                ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+                resetProjectViewportTransition();
             }
-        },
-    ]
-});
+        }],
+        views: [{
+                namespace: 'home',
+                async afterEnter(data) {
+                    await runViewInitializers('home', data.next.container);
+                }
+            },
+            {
+                namespace: 'project',
+                async afterEnter(data) {
+                    await runViewInitializers('project', data.next.container);
+                }
+            },
+            {
+                namespace: 'allWork',
+                async afterEnter(data) {
+                    await runViewInitializers('allWork', data.next.container);
+                }
+            },
+            {
+                namespace: `capabilities`,
+                async afterEnter(data) {
+                    await runViewInitializers('capabilities', data.next.container);
+                }
+            },
+            {
+                namespace: 'playground',
+                async afterEnter(data) {
+                    await runViewInitializers('playground', data.next.container);
+                }
+            },
+            {
+                namespace: 'resume',
+                async afterEnter(data) {
+                    await runViewInitializers('resume', data.next.container);
+                }
+            },
+        ]
+    });
+}

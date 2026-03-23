@@ -1,27 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ro">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../media/home/adrian.webp" type="image/webp">
+    <link rel="apple-touch-icon" href="../media/home/adrian.webp">
 
-    <link rel="icon" href="../media/favicon.svg" type="image/svg+xml">
-    <link rel="alternate icon" href="../media/favicon.png" type="image/png">
-    <link rel="apple-touch-icon" href="../media/favicon.png">
+    <link rel="canonical" href="https://furtuna.ro/capabilities/">
+    <link rel="alternate" hreflang="ro" href="https://furtuna.ro/capabilities/">
+    <link rel="alternate" hreflang="en" href="https://furtuna.ro/en/capabilities/">
+    <link rel="alternate" hreflang="x-default" href="https://furtuna.ro/capabilities/">
 
-    <meta property="og:title" content="STORM Studio - Capabilities">
+    <meta property="og:title" content="FURTUNA - Servicii">
     <meta property="og:description"
-        content="We’re a global design studio delivering enterprise-grade digital products.">
+        content="Servicii de Product Design, discovery si prototipare pentru produse complexe, construite in jurul constrangerilor reale.">
     <meta property="og:image" content="../media/og-image.webp">
     <meta property="og:type" content="website">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="STORM Studio - Capabilities">
+    <meta name="twitter:title" content="FURTUNA - Servicii">
     <meta name="twitter:description"
-        content="We’re a global design studio delivering enterprise-grade digital products.">
+        content="Servicii de Product Design, discovery si prototipare pentru produse complexe, construite in jurul constrangerilor reale.">
     <meta name="twitter:image" content="../media/og-image.webp">
 
-    <title>STORM Studio - Capabilities</title>
+    <title>FURTUNA - Servicii</title>
     <link rel="stylesheet" href="../styles/reset.css?v=1">
     <link rel="stylesheet" href="../styles/style.css?v=1">
     <link rel="stylesheet" href="https://unpkg.com/lenis@1.3.4/dist/lenis.css">
@@ -65,15 +68,14 @@
         <div class="cookies-wrapper">
             <div class="_content">
                 <div class="width-limiter">
-                    <div class="_text">We are using cookies to improve your experience. By using this website you accept
-                        the usage of cookies.</div>
+                    <div class="_text">Folosesc cookie-uri pentru a-ți îmbunătăți experiența. Prin utilizarea acestui website accepți folosirea cookie-urilor.</div>
                     <div class="_button">OK</div>
                 </div>
             </div>
         </div>
 
         <div class="header-wrapper">
-            <div class="width-limiter">
+            <div class="width-limiter-home">
                 <header>
                     <div class="_left">
                         <a href="../index.html">
@@ -88,16 +90,22 @@
                     <div class="_center">
                         <nav>
                             <ul>
-                                <li><a href="../">HOME</a></li>
-                                <li><a href="">CAPABILITIES</a></li>
-                                <li><a href="../work/all/">WORK</a></li>
-                                <li><a href="../playground/">PLAYGROUND</a></li>
+                                <li><a href="../index.html">ACASĂ</a></li>
+                                <li><a href="">SERVICII</a></li>
+                                <li><a href="../work/all/index.html">PROIECTE</a></li>
+                                <li><a href="../playground/index.html">LAB</a></li>
                             </ul>
                         </nav>
                     </div>
                     <div class="_right">
-                        <div class="_mobile-menu-toggle">MENU</div>
-                        <a class="_lets-talk" href="https://cal.com/adrian-furtuna/15min" target="null">LET'S TALK</a>
+                        <div class="_mobile-menu-toggle">MENIU</div>
+                        <a class="_lets-talk" href="https://cal.com/adrian-furtuna/15min" target="null">HAI SĂ VORBIM</a>
+                        <div class="_lang-switcher">
+                            <a class="_lang-link _active" data-barba-prevent="self" href="/capabilities/">RO</a>
+                            <span>/</span>
+                            <a class="_lang-link" data-barba-prevent="self" href="/en/capabilities/">EN</a>
+                        </div>
+                        
                     </div>
                 </header>
             </div>
@@ -106,15 +114,15 @@
         <div class="mobile-menu">
             <div class="_nav">
                 <ul>
-                    <li><a href="../">HOME</a></li>
-                    <li><a href="">CAPABILITIES</a></li>
-                    <li><a href="../work/all/">WORK</a></li>
-                    <li><a href="../playground/">PLAYGROUND</a></li>
+                    <li><a href="../index.html">ACASĂ</a></li>
+                    <li><a href="">SERVICII</a></li>
+                    <li><a href="../work/all/index.html">PROIECTE</a></li>
+                    <li><a href="../playground/index.html">LAB</a></li>
                 </ul>
             </div>
             <a href="">
                 <div class="_book-a-call">
-                    <div class="_content">Book<br>a call</div>
+                    <div class="_content">Programează<br>un apel</div>
                 </div>
             </a>
             <div class="_email">hello@furtuna.ro</div>
@@ -131,47 +139,47 @@
                 <div class="_content" id="caseStudyOverlayScroll">
                     <div class="_title"></div>
                     <div class="_paragraphs"></div>
-                    <div class="_button">Tell me less</div>
+                    <div class="_button">Arată-mi mai puțin</div>
                 </div>
             </div>
             <div class="_outside-click"></div>
         </div>
 
-        <main class="main-grid width-limiter">
+        <main class="main-grid width-limiter-home">
             <div class="capabilities-hero">
-                <h1 class="_heading">Great design aligns product, business, and tech.</h1>
+                <h1 class="_heading">Designul bun aliniază produsul, business-ul și tehnologia.</h1>
                 <div class="_diagram">
                     <img src="../media/capabilities/diagram.svg" alt="">
                 </div>
             </div>
 
             <div class="capabilities">
-                <div class="_heading">Every product we touch balances user needs, technical realities, and business
-                    goals</div>
+                <div class="_heading">Fiecare produs la care lucrez echilibrează nevoile utilizatorilor, realitatea
+                    tehnică și obiectivele de business.</div>
 
                 <div class="_nav">
                     <div class="_sticky-wrapper">
-                        <a href="#productDesign" class="_item">Product
-                            Design</a>
-                        <a href="#discoveryResearch" class="_item">Discovery & Research</a>
-                        <a href="#prototypingValidation" class="_item">Prototyping & Validation</a>
-                        <a href="#extendedCapabilities" class="_item">Capabilities</a>
+                        <a href="#productDesign" class="_item">Design de
+                            produs</a>
+                        <a href="#discoveryResearch" class="_item">Discovery și cercetare</a>
+                        <a href="#prototypingValidation" class="_item">Prototipare și validare</a>
+                        <a href="#extendedCapabilities" class="_item">Capabilități</a>
                     </div>
                 </div>
 
                 <section id="productDesign" class="product-design">
-                    <div class="_title">Product Design</div>
+                    <div class="_title">Design de produs</div>
                     <div class="_image">
                         <img src="../media/capabilities/product-design.webp" alt="">
                     </div>
-                    <div class="_text">From product chaos to confident design.<br>
-                        We bring structure to the mess, defining user flows, shaping interfaces, and aligning teams to
-                        build products that actually work, for the people who matter.
+                    <div class="_text">De la haos de produs la design cu direcție.<br>
+                        Aduc structură în complexitate: definesc fluxuri de utilizator, construiesc interfețe și aliniez
+                        echipele pentru produse care chiar funcționează.
                         <br><br>
-                        Whether you’re building from scratch or rethinking what’s already there, we help you make the
-                        right product decisions faster, and with fewer headaches.</div>
+                        Fie că pornești de la zero sau refaci un produs existent, te ajut să iei deciziile corecte mai
+                        rapid și cu mai puțin risc.</div>
                     <div class="_button">
-                        <div class="_content">Tell me more</div>
+                        <div class="_content">Spune-mi mai multe</div>
                         <div class="_overlay-border"></div>
                     </div>
                     <div class="_divider"></div>
@@ -183,233 +191,169 @@
                     </div>
 
                     <div class="_overlay-content">
-                        <div class="_title">Product Design</div>
-                        <div class="_paragraphs">Picture this: You're navigating today's product landscape, where the
-                            lines
-                            between product and experience are fading into nonexistence. Consumer expectations shift
-                            like
-                            sand
-                            beneath your feet. Virtually all businesses are locked in fierce competition for the same
-                            precious
-                            commodity, time, space, and attention. Your users aren't just choosing between features
-                            anymore;
-                            they're choosing between entire worlds of experience.
+                        <div class="_title">Design de produs</div>
+                        <div class="_paragraphs">Astăzi, competiția nu mai este doar între funcționalități, ci între
+                            experiențe complete. Utilizatorii compară produse prin claritate, viteză și încredere.
                             <br><br>
-                            This is where most companies find themselves, trapped in product chaos, watching
-                            breakthrough
-                            opportunities slip away while competitors redefine what's possible. But here's what we've
-                            learned
-                            after working across industries with hundreds of clients, from scrappy startups to global
-                            enterprises: great products aren't born from good intentions or surface-level solutions.
-                            They
-                            emerge
-                            from the beautiful uncertainty that comes with emerging technologies and practices.
+                            Aici intervin eu: aduc structură în complexitate, traduc ambiguitatea în decizii și aliniez
+                            produsul cu obiectivele de business.
                             <br><br>
-                            We don't just make things look good, though they do end up creating emotive, sustainable
-                            experiences
-                            that resonate deeply. We design breakthrough products and experiences that are good for
-                            people,
-                            your
-                            business, and our planet. Whether you're wrestling with a legacy system that's lost its
-                            competitive
-                            edge or launching something entirely new into an unforgiving market, we bring structure to
-                            the
-                            ambiguity that defines innovation.
+                            Nu livrez doar ecrane frumoase, ci produse care performează: experiențe ușor de folosit,
+                            coerente tehnic și relevante pentru piață.
                             <br><br>
-                            Here's how we thrive in uncertainty: We work across scales, from digital to product to
-                            architecture,
-                            ensuring that the overall experience brings together the best of physical, digital, spatial,
-                            and
-                            emerging technologies. We dive deep into the chaos, map the madness, and listen to the
-                            shifting
-                            demands of your users and stakeholders. Then we do what industry leaders do, we define new
-                            products
-                            and experiences that uncover new revenue streams, drive brand perception and loyalty, and
-                            set
-                            businesses apart in competitive markets.
+                            Lucrez cap-coadă, de la strategie și arhitectură de experiență până la execuție și validare.
+                            Asta înseamnă mai puțin risc, iterații mai rapide și rezultate măsurabile.
                             <br><br>
-                            By aligning design with strategy, not the other way around, we turn scattered insights into
-                            focused
-                            action and half-baked ideas into product experiences that people love in both B2C and B2B
-                            environments. Products that don't just solve problems, but reimagine our future. Products
-                            that
-                            create new possibilities for how we live, work, and connect.
-                            <br>From product chaos to confident design. That's not just our promise, it's our proven
-                            track
-                            record of turning uncertainty into opportunity, one breakthrough product at a time."</div>
+                            Pe scurt: transform haosul de produs în direcție clară, iar incertitudinea în oportunitate.</div>
 
                     </div>
                 </section>
 
                 <section id="discoveryResearch" class="product-design">
-                    <div class="_title">Discovery & Research</div>
+                    <div class="_title">Discovery și cercetare</div>
                     <div class="_image">
                         <img src="../media/capabilities/discovery-research.webp" alt="">
                     </div>
-                    <div class="_text">Clarity begins with understanding.
+                    <div class="_text">Claritatea începe cu înțelegerea.
                         <br><br>
-                        Every successful product starts by asking the right questions. Our discovery process gets to the
-                        root of your users’ needs and your business goals, fast. Through stakeholder interviews, UX
-                        audits, and lean research methods, we identify the real challenges and uncover the hidden
-                        opportunities.
+                        Fiecare produs bun pornește de la întrebările potrivite. Prin interviuri cu stakeholderi, audit
+                        UX și research aplicat, identific rapid problemele reale și oportunitățile cu impact.
                         <br><br>
-                        The result? </div>
+                        Rezultatul: direcție clară înainte de execuție.</div>
                     <div class="_button">
-                        <div class="_content">Tell me more</div>
+                        <div class="_content">Spune-mi mai multe</div>
                         <div class="_overlay-border"></div>
                     </div>
                     <div class="_divider"></div>
                     <div class="_services">
-                        <div class="_item">Stakeholder & Customer Interviews</div>
-                        <div class="_item">Competitive & UX Benchmarking</div>
-                        <div class="_item">Heuristic Audits</div>
-                        <div class="_item">Journey Mapping & UX Architecture</div>
+                        <div class="_item">Interviuri cu stakeholderi și clienți</div>
+                        <div class="_item">Benchmark competitiv și UX</div>
+                        <div class="_item">Audituri euristice</div>
+                        <div class="_item">Journey mapping și arhitectură UX</div>
                     </div>
 
                     <div class="_overlay-content">
-                        <div class="_title">Discovery & UX Research</div>
-                        <div class="_paragraphs">Most teams jump straight into solutions. We don’t. Because in complex
-                            ecosystems, moving fast without understanding is just a faster way to miss the mark.
+                        <div class="_title">Discovery și cercetare UX</div>
+                        <div class="_paragraphs">Majoritatea echipelor sar direct în soluții. Eu nu. În ecosisteme
+                            complexe, viteza fără înțelegere înseamnă doar greșeli mai rapide.
                             <br><br>
-                            Discovery is where we pause—not to slow down, but to aim better. We immerse ourselves in
-                            your business landscape, untangle stakeholder agendas, and surface what actually matters to
-                            your users. It’s part investigation, part pattern recognition, and all about making smarter
-                            decisions from the start.
+                            Discovery este etapa în care clarific contextul, obiectivele și constrângerile reale.
+                            Conectez perspectivele stakeholderilor cu nevoile utilizatorilor și transform insight-urile
+                            în direcție de produs.
                             <br><br>
-                            We’re not here to dump a pile of insights into a deck. We synthesize research into
-                            direction. From competitive analysis to stakeholder interviews, from journey mapping to
-                            usability tests, we expose what’s working, what’s not, and where your greatest opportunities
-                            lie.
+                            De la analiză competitivă la interviuri și usability testing, livrez concluzii aplicabile,
+                            nu documente decorative.
                             <br><br>
-                            And here’s the real difference: we don’t just uncover user pain points—we connect them to
-                            business levers. Because a good product doesn’t just serve the user; it has to move the
-                            needle for your company.
+                            Diferența-cheie: leg problemele utilizatorilor de obiectivele de business, ca produsul să
+                            genereze și valoare pentru companie, nu doar o experiență plăcută.
                             <br><br>
-                            So whether you’re validating a new concept, rethinking a legacy experience, or aligning
-                            cross-functional teams around a shared vision, discovery is where we build that foundation.
-                            One rooted in clarity, not assumptions.
-                            <br><br>
-                            Discovery isn’t prelude—it’s a strategic tool for competitive advantage. We wield it
-                            accordingly.</div>
-                        <div class="_button">Tell me less</div>
+                            Discovery nu este o introducere. Este un instrument strategic de avantaj competitiv.</div>
+                        <div class="_button">Arată-mi mai puțin</div>
                     </div>
                 </section>
 
                 <section id="prototypingValidation" class="product-design">
-                    <div class="_title">Prototyping & Validation</div>
+                    <div class="_title">Prototipare și validare</div>
                     <div class="_image">
                         <img src="../media/capabilities/prototyping-validation.webp" alt="">
                     </div>
-                    <div class="_text">De-risking decisions through real interaction.
+                    <div class="_text">Reduc riscul deciziilor prin interacțiune reală.
                         <br><br>
-                        We don’t just imagine how something might work, we build it and test it. From early concepts to
-                        high-fidelity, dynamic prototypes powered by tools like ProtoPie, we help teams explore
-                        possibilities and validate ideas before a single line of code is written.
+                        Nu doar îmi imaginez cum ar putea funcționa ceva, construiesc și testez. De la concepte timpurii
+                        la prototipuri high-fidelity, dinamice, construite în ProtoPie, ajut echipele să valideze ideile
+                        înainte de o singură linie de cod.
                         <br><br>
-                        This means fewer surprises in development, clearer handoffs, and stronger confidence at every
-                        step.</div>
+                        Asta înseamnă mai puține surprize în dezvoltare, handoff-uri mai clare și mai multă încredere la
+                        fiecare pas.</div>
                     <div class="_button">
-                        <div class="_content">Tell me more</div>
+                        <div class="_content">Spune-mi mai multe</div>
                         <div class="_overlay-border"></div>
                     </div>
                     <div class="_divider"></div>
                     <div class="_services">
-                        <div class="_item">Low to High Fidelity Prototypes</div>
-                        <div class="_item">API-connected Protopie Systems</div>
-                        <div class="_item">User Testing Setup & Reporting</div>
-                        <div class="_item">Design QA with Devs</div>
+                        <div class="_item">Prototipuri low și high fidelity</div>
+                        <div class="_item">Sisteme ProtoPie conectate la API</div>
+                        <div class="_item">Set-up și raportare pentru user testing</div>
+                        <div class="_item">Design QA cu developeri</div>
                     </div>
 
                     <div class="_overlay-content">
-                        <div class="_title">Prototyping & Validation</div>
-                        <div class="_paragraphs">Most ideas sound great in a meeting. The real test? Putting them in
-                            users’ hands before a single line of code is written.
+                        <div class="_title">Prototipare și validare</div>
+                        <div class="_paragraphs">Multe idei sună bine în ședință. Testul real este în mâna utilizatorului,
+                            înainte să scriem cod.
                             <br><br>
-                            Prototyping isn’t a checkbox for us—it’s a strategic shortcut to truth. We design
-                            interactive, high-fidelity prototypes that feel like the real thing, not just pretty
-                            placeholders. Built with tools like ProtoPie, they pull live data, simulate system logic,
-                            and mimic real-world conditions—so what you see is dangerously close to what you’ll ship.
+                            Pentru mine, prototiparea nu e un checkbox, ci cel mai rapid drum către adevăr. Construiesc
+                            prototipuri interactive care simulează logică de sistem și comportamente reale.
                             <br><br>
-                            Why does that matter? Because it removes the guesswork. It aligns stakeholders. It prevents
-                            teams from sinking months of development into something that was flawed from day one. In
-                            other words, it’s your insurance policy against expensive misfires.
+                            De ce contează? Elimină presupunerile, aliniază stakeholderii și previne luni de dezvoltare
+                            pe direcții greșite.
                             <br><br>
-                            Validation goes hand-in-hand. We test early, test often, and test smart—with real users and
-                            real context. No artificial lab settings, no scripted hand-holding. Just honest reactions
-                            from the people who’ll actually use what you’re building.
+                            Validarea vine în paralel: testez devreme, des și în context real, cu utilizatori reali.
                             <br><br>
-                            This approach isn’t just about getting buy-in. It’s about sharpening your product’s edge
-                            before it hits the market. And in complex environments with high stakes, that clarity is
-                            everything.
-                            <br><br>
-                            Think of prototyping as your unfair advantage—one that surfaces issues early, unlocks
-                            insights fast, and brings everyone along for the ride.</div>
-                        <div class="_button">Tell me less</div>
+                            Așa obții un produs mai bun înainte de lansare, cu risc mai mic și decizii mai solide.</div>
+                        <div class="_button">Arată-mi mai puțin</div>
                     </div>
                 </section>
 
                 <section id="extendedCapabilities" class="product-design">
-                    <div class="_title">Extended capabilities</div>
+                    <div class="_title">Capabilități extinse</div>
                     <div class="_image">
                         <img src="../media/capabilities/extended-capabilities.webp" alt="">
                     </div>
-                    <div class="_text">When the solution calls for more, we bring the right people to the table.
+                    <div class="_text">Când soluția cere mai mult, aduc oamenii potriviți la masă.
                         <br><br>
-                        We specialize in product design—but we don’t operate in a vacuum. Some challenges require more
-                        than UX alone. That’s why we’ve built a trusted network of senior collaborators in branding,
-                        development, motion, and more—partners we’ve worked with and who understand how to deliver at
-                        our level.
+                        Sunt specializat pe design de produs, dar unele provocări cer mai mult decât UX. De aceea am un
+                        network de colaboratori seniori în branding, development, motion și altele.
                         <br><br>
-                        This isn’t a hand-off. It’s a hand-in. We stay involved, guiding the work to ensure consistency
-                        across touchpoints and alignment with your goals. No bloated teams, no lost context, no guessing
-                        who’s doing what. Just the right expertise, brought in at the right time, to solve the problem
-                        at hand.
+                        Nu e un hand-off, e un hand-in: rămân implicat, coordonez execuția și păstrez consistența pe
+                        toate punctele de contact.
                         <br><br>
-                        Whether it’s translating a product vision into a brand system, building out the engineering
-                        layer, or bringing your story to life through motion—we scale up without losing focus.</div>
+                        Fie că transformăm o viziune de produs într-un sistem de brand, construim partea de engineering
+                        sau aducem povestea la viață prin motion, scalez echipa fără să pierdem focusul.</div>
                     <div class="_divider"></div>
                     <div class="_services">
-                        <div class="_item">Branding & Identity</div>
-                        <div class="_item">Web & Mobile Development</div>
-                        <div class="_item">Motion & Illustration</div>
+                        <div class="_item">Branding și identitate</div>
+                        <div class="_item">Dezvoltare web și mobile</div>
+                        <div class="_item">Motion și ilustrație</div>
                     </div>
                 </section>
             </div>
 
         </main>
 
-        <footer>
-            <div class="_contact-blob">
+        <footer class="home-footer">
+            <div class="width-limiter-home">
                 <div class="_content">
-                    Book<br>a call
-                </div>
-            </div>
-
-            <div class="width-limiter-wide">
-                <a href="https://cal.com/adrian-furtuna/15min" target="null">
-                    <div class="_get-in-touch">
-                        <div class="_pre-heading">Contact us today</div>
-                        <div class="_heading">Get in touch, it's free.</div>
-                        <div class="_book-a-call">
-                            <div class="_content">
-                                Book<br>a call
+                    <div class="_info">
+                        <div class="_profile">
+                            <div class="_avatar">
+                                <img src="../media/home/adrian.webp" alt="Adrian Furtuna">
                             </div>
+                            <a href="mailto:adrian@furtuna.ro" class="_email">adrian@furtuna.ro</a>
+                            <div class="_location">Din România &amp; remote</div>
+                        </div>
+
+                        <div class="_socials">
+                            <a href="https://www.linkedin.com/in/adrian-furtuna/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                            <a href="https://github.com/onutadrian" target="_blank" rel="noopener noreferrer">GitHub</a>
+                            <a href="https://x.com/OnutAdrian" target="_blank" rel="noopener noreferrer">X</a>
+                        </div>
+
+                        <div class="_legal">
+                            <span>Informații legale</span>
+                            <span>Copyright furtuna.ro 2026</span>
                         </div>
                     </div>
-                </a>
 
-                <div class="_flex-wrapper">
-                 <div class="_left">
-                        <a href="mailto:hello@thestorm.studio" class="_email">hello@thestorm.studio</a>
-                        <div class="_location">United States, and remote</div>
-                    </div>
-                    <div class="_right">
-                        <a href="" class="_legal">Legal info</a>
+                    <div class="_artworks">
+                        <div class="_artwork">
+                            <img src="../media/home/footer-left.webp" alt="">
+                        </div>
+                        <div class="_artwork">
+                            <img src="../media/home/footer-right.webp" alt="">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="_logo">
-                <img src="../media/footer-logo.webp" alt="">
             </div>
         </footer>
 
