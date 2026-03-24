@@ -3983,30 +3983,32 @@ footer ._logo {
 
 .playground-item-fullscreen {
   position: fixed;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   top: 0;
   left: 0;
   z-index: 500;
   opacity: 0;
   pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .playground-item-fullscreen ._background {
-  position: fixed;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  inset: 0;
   background: rgba(0, 0, 0, 0.8);
-  top: 0;
-  left: 0;
 }
 .playground-item-fullscreen ._close-button {
   position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
   color: #ffffff;
   padding: 0.75rem;
   background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(8px);
   border-radius: 500px;
   z-index: 100;
+  cursor: pointer;
 }
 @media screen and (max-width: 1024px) {
   .playground-item-fullscreen ._close-button {
@@ -4018,6 +4020,17 @@ footer ._logo {
   width: 1rem;
 }
 .playground-item-fullscreen .width-limiter {
+  width: 100%;
+  max-width: none;
+  padding: 0 1.5rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.playground-item-fullscreen .width-limiter ._video-wrapper {
+  width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
@@ -4025,13 +4038,13 @@ footer ._logo {
   position: relative;
 }
 .playground-item-fullscreen .width-limiter ._video-wrapper video {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  max-width: 80vw;
+  position: relative;
+  max-width: min(80vw, 110rem);
   max-height: 80vh;
-  transform: translate(-50%, -50%);
-  object-fit: cover;
+  width: auto;
+  height: auto;
+  transform: none;
+  object-fit: contain;
 }
 @media screen and (max-width: 1024px) {
   .playground-item-fullscreen .width-limiter ._video-wrapper video {
@@ -4075,39 +4088,26 @@ footer ._logo {
   }
 }
 .playground .playground-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: block;
+  position: relative;
   gap: 1rem;
-  grid-auto-rows: 16rem;
-  grid-auto-flow: dense;
-}
-@media screen and (max-width: 1024px) {
-  .playground .playground-grid {
-    display: flex;
-    flex-direction: column;
-  }
 }
 .playground .playground-grid ._item {
-  width: 100%;
-  height: 100%;
-  border-radius: 0.5rem;
+  width: var(--item-width, 100%);
+  height: var(--item-height, auto);
+  border-radius: 0;
   background: gainsboro;
   border: 1px solid #C2D0D4;
   overflow: hidden;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(var(--item-x, 0), var(--item-y, 0));
   cursor: pointer;
-  box-shadow: 0px 0px 8px rgba(0, 0, 8, 0.05);
-}
-@media screen and (max-width: 1024px) {
-  .playground .playground-grid ._item {
-    max-width: 500px;
-    margin: 0 auto;
-  }
 }
 .playground .playground-grid ._item ._view {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   display: flex;
   z-index: 1;
   padding: 1rem;
@@ -4128,35 +4128,24 @@ footer ._logo {
 .playground .playground-grid ._item:hover > ._view > ._icon {
   opacity: 1;
 }
+.playground .playground-grid ._item img,
+.playground .playground-grid ._item video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: var(--media-fit, cover);
+  object-position: var(--media-position, 50% 50%);
+}
 @media screen and (min-width: 1024px) {
   .playground .playground-grid ._item video {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    min-width: 100%;
-    min-height: 100%;
-    transform: translate(-50%, -50%);
-    object-fit: cover;
+    inset: 0;
   }
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 767px) {
   .playground .playground-grid ._item video {
-    width: 100%;
-    height: auto;
-    position: relative;
+    position: absolute;
   }
-}
-.playground .playground-grid ._item.w2 {
-  grid-column: span 2;
-}
-.playground .playground-grid ._item.w3 {
-  grid-column: span 3;
-}
-.playground .playground-grid ._item.h2 {
-  grid-row: span 2;
-}
-.playground .playground-grid ._item.h3 {
-  grid-row: span 3;
 }
 
 /*# sourceMappingURL=style.css.map */

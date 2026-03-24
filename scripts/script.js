@@ -1633,9 +1633,11 @@ function workPage(container = document) {
 function playgroundPage(container = document) {
 
     let mm = gsap.matchMedia();
+    let playgroundGrid = container.querySelector(`.playground-grid`)
+    if (!playgroundGrid) return;
 
-    let playgroundItems = container.querySelectorAll(`.playground ._item`)
-    if (!playgroundItems) return;
+    let playgroundItems = Array.from(playgroundGrid.querySelectorAll(`._item`))
+    if (!playgroundItems.length) return;
 
     let isFullscreen = false;
     let activeVideoParent = null;
@@ -1646,9 +1648,149 @@ function playgroundPage(container = document) {
 
     let closeButton = fullscreenElement.querySelector(`._close-button`)
 
-    console.log(fullscreenBackground)
+    playgroundItems.forEach((item, index) => {
+        item.dataset.playgroundOrder = index;
+    })
 
-    Array.from(playgroundItems).forEach(item => {
+    function getPlaygroundColumnCount() {
+        if (window.innerWidth <= 767) return 1;
+        if (window.innerWidth <= 1024) return 2;
+        return 3;
+    }
+
+    function getPlaygroundItemWeight(item) {
+        let aspectValue = getComputedStyle(item).getPropertyValue(`--item-aspect`).trim();
+        if (!aspectValue || !aspectValue.includes(`/`)) return 1;
+
+        let [widthValue, heightValue] = aspectValue.split(`/`).map(value => parseFloat(value.trim()));
+        if (!widthValue || !heightValue) return 1;
+
+        return heightValue / widthValue;
+    }
+
+    function getPlaygroundColumnSpan(item, columnCount) {
+        if (columnCount === 1) return 1;
+
+        let aspectRatio = 1 / getPlaygroundItemWeight(item);
+        let wideThreshold = 1.35;
+        let fullThreshold = 3;
+
+        if (aspectRatio >= fullThreshold) return columnCount;
+        if (aspectRatio >= wideThreshold) return Math.min(2, columnCount);
+        return 1;
+    }
+
+    function applyIntrinsicAspectRatio(item) {
+        let declaredAspect = item.dataset.aspect;
+        if (declaredAspect && declaredAspect.includes(`/`)) {
+            item.style.setProperty(`--item-aspect`, declaredAspect);
+            return true;
+        }
+
+        let image = item.querySelector(`img`);
+        if (image && image.naturalWidth && image.naturalHeight) {
+            item.style.setProperty(`--item-aspect`, `${image.naturalWidth} / ${image.naturalHeight}`);
+            return true;
+        }
+
+        let video = item.querySelector(`video`);
+        if (video && video.videoWidth && video.videoHeight) {
+            item.style.setProperty(`--item-aspect`, `${video.videoWidth} / ${video.videoHeight}`);
+            return true;
+        }
+
+        return false;
+    }
+
+    function watchIntrinsicAspectRatio(item) {
+        let image = item.querySelector(`img`);
+        if (image) {
+            if (applyIntrinsicAspectRatio(item)) return;
+
+            image.addEventListener(`load`, () => {
+                if (applyIntrinsicAspectRatio(item)) {
+                    balancePlaygroundColumns();
+                }
+            }, { once: true });
+            return;
+        }
+
+        let video = item.querySelector(`video`);
+        if (video) {
+            let applyVideoRatio = () => {
+                if (applyIntrinsicAspectRatio(item)) {
+                    balancePlaygroundColumns();
+                }
+            };
+
+            if (video.readyState >= 1 && applyIntrinsicAspectRatio(item)) return;
+
+            video.addEventListener(`loadedmetadata`, applyVideoRatio, { once: true });
+            video.addEventListener(`loadeddata`, applyVideoRatio, { once: true });
+            video.addEventListener(`canplay`, applyVideoRatio, { once: true });
+            video.addEventListener(`durationchange`, applyVideoRatio, { once: true });
+
+            video.preload = `metadata`;
+            video.load();
+        }
+    }
+
+    function balancePlaygroundColumns() {
+        if (isFullscreen) return;
+
+        let columnCount = getPlaygroundColumnCount();
+        let gapValue = parseFloat(getComputedStyle(playgroundGrid).gap) || 0;
+        let columnWidth = (playgroundGrid.clientWidth - (gapValue * (columnCount - 1))) / columnCount;
+        let columnHeights = new Array(columnCount).fill(0);
+
+        playgroundItems.forEach(item => {
+            let aspectRatio = 1 / getPlaygroundItemWeight(item);
+            let columnSpan = Math.min(getPlaygroundColumnSpan(item, columnCount), columnCount);
+            let targetWidth = (columnWidth * columnSpan) + (gapValue * (columnSpan - 1));
+            let targetHeight = targetWidth / aspectRatio;
+
+            let bestColumn = 0;
+            let bestOffset = Infinity;
+
+            for (let start = 0; start <= columnCount - columnSpan; start++) {
+                let offset = Math.max(...columnHeights.slice(start, start + columnSpan));
+                if (offset < bestOffset) {
+                    bestOffset = offset;
+                    bestColumn = start;
+                }
+            }
+
+            let x = (columnWidth + gapValue) * bestColumn;
+            let y = bestOffset;
+
+            item.style.setProperty(`--item-width`, `${targetWidth}px`);
+            item.style.setProperty(`--item-height`, `${targetHeight}px`);
+            item.style.setProperty(`--item-x`, `${x}px`);
+            item.style.setProperty(`--item-y`, `${y}px`);
+
+            let nextHeight = y + targetHeight + gapValue;
+            for (let index = bestColumn; index < bestColumn + columnSpan; index++) {
+                columnHeights[index] = nextHeight;
+            }
+        });
+
+        let containerHeight = Math.max(...columnHeights, 0);
+        playgroundGrid.style.height = `${Math.max(0, containerHeight - gapValue)}px`;
+    }
+
+    balancePlaygroundColumns();
+
+    let playgroundResizeObserver = new ResizeObserver(() => {
+        balancePlaygroundColumns();
+    });
+
+    playgroundResizeObserver.observe(playgroundGrid);
+
+    playgroundItems.forEach(item => {
+        watchIntrinsicAspectRatio(item);
+    });
+
+    playgroundItems.forEach(item => {
 
         let video = item.querySelector(`video`)
 
@@ -1668,9 +1810,6 @@ function playgroundPage(container = document) {
             })
 
             item.addEventListener(`click`, () => {
-
-                document.documentElement.style.cursor = 'none';
-
                 isFullscreen = true;
                 activeVideoParent = item;
 
@@ -1694,9 +1833,6 @@ function playgroundPage(container = document) {
     })
 
     fullscreenElement.addEventListener(`click`, () => {
-
-        document.documentElement.style.cursor = 'auto';
-
         if (!isFullscreen) return;
         isFullscreen = false;
 
@@ -1721,29 +1857,6 @@ function playgroundPage(container = document) {
         Flip.from(state, {
             duration: 0
         })
-
-    })
-
-    mm.add(`(min-width: ${mobileBreakpoint}px)`, () => {
-
-        gsap.set(closeButton, {
-            xPercent: -50,
-            yPercent: -50
-        });
-
-        let xTo = gsap.quickTo(closeButton, "x", {
-                duration: 0.3,
-                ease: "power3"
-            }),
-            yTo = gsap.quickTo(closeButton, "y", {
-                duration: 0.3,
-                ease: "power3"
-            });
-
-        window.addEventListener("mousemove", e => {
-            xTo(e.clientX);
-            yTo(e.clientY);
-        });
 
     })
 
