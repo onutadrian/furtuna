@@ -15,6 +15,9 @@ gsap.registerPlugin(Flip, ScrollTrigger, Draggable, InertiaPlugin, SplitText)
 let scrollDirection = null;
 lenis.on('scroll', (e) => {
     scrollDirection = e.direction
+    if (headerScrollListener) {
+        headerScrollListener(e);
+    }
 })
 
 // isScrollProgrammatic to diferentiate between user an non-user scroll
@@ -1381,42 +1384,77 @@ function headerScrollAnimation(container = document) {
     let headerWrapperElement = container.querySelector(`.header-wrapper`)
     if (!headerWrapperElement) return;
 
-    if (headerScrollListener) {
-        window.removeEventListener(`scroll`, headerScrollListener);
-        headerScrollListener = null;
-    }
-
-    let isHeaderEntering = false;
-
-    let headerAnimation = gsap.from(headerWrapperElement, {
-        yPercent: -100,
-        paused: true,
-        duration: 0.3,
-        immediateRender: false
-    }).progress(1);
+    headerScrollListener = null;
 
     gsap.set(headerWrapperElement, {
-        autoAlpha: 1,
         yPercent: 0
     });
 
-    let lastDirection = null;
+    let lastScrollY = window.scrollY || window.pageYOffset || 0;
+    let topThreshold = 72;
+    let hideThreshold = 24;
+    let showThreshold = 12;
+    let isHeaderHidden = false;
+    let accumulatedDelta = 0;
 
-    headerScrollListener = () => {
-        if (isHeaderEntering || isScrollProgrammatic || scrollDirection == null) return;
+    function hideHeader() {
+        gsap.killTweensOf(headerWrapperElement);
+        gsap.to(headerWrapperElement, {
+            yPercent: -100,
+            duration: 0.28,
+            ease: `power3.out`,
+            overwrite: true
+        });
+    }
 
-        if (scrollDirection != lastDirection) {
-            lastDirection = scrollDirection;
+    function showHeader() {
+        gsap.killTweensOf(headerWrapperElement);
+        gsap.to(headerWrapperElement, {
+            yPercent: 0,
+            duration: 0.28,
+            ease: `power3.out`,
+            overwrite: true
+        });
+    }
 
-            if (scrollDirection == 1 && mobileMenuOpen == false) {
-                headerAnimation.reverse()
-            } else if (scrollDirection == -1) {
-                headerAnimation.play()
+    headerScrollListener = (event) => {
+        if (isScrollProgrammatic) return;
+
+        let currentScrollY = event?.scroll ?? window.scrollY ?? window.pageYOffset ?? 0;
+        let scrollDelta = currentScrollY - lastScrollY;
+
+        if (currentScrollY <= topThreshold) {
+            if (isHeaderHidden) {
+                showHeader();
+                isHeaderHidden = false;
             }
+            accumulatedDelta = 0;
+            lastScrollY = currentScrollY;
+            return;
         }
-    };
 
-    window.addEventListener(`scroll`, headerScrollListener)
+        if (Math.abs(scrollDelta) < 1) {
+            return;
+        }
+
+        if ((accumulatedDelta > 0 && scrollDelta < 0) || (accumulatedDelta < 0 && scrollDelta > 0)) {
+            accumulatedDelta = 0;
+        }
+
+        accumulatedDelta += scrollDelta;
+
+        if (accumulatedDelta >= hideThreshold && mobileMenuOpen == false && !isHeaderHidden) {
+            hideHeader();
+            isHeaderHidden = true;
+            accumulatedDelta = 0;
+        } else if (accumulatedDelta <= -showThreshold && isHeaderHidden) {
+            showHeader();
+            isHeaderHidden = false;
+            accumulatedDelta = 0;
+        }
+
+        lastScrollY = currentScrollY;
+    };
 }
 
 function toggleMobileMenu(container = document) {
