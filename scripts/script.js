@@ -1673,7 +1673,7 @@ const playgroundItems = {
     'motion-systems': {
         title: 'Animated landing page intro.',
         titleRo: 'Intro animat pentru landing page.',
-        description: 'This was an actual landing page for one of the BlackRock companies. They wanted to make use of the video behind it, so I animated the header and demo dashboard to build the landing page nicely.',
+        description: 'This was an actual landing page for one of the BlackRock companies. They wanted to make use of the video behind, so I animated the header and demo dashboard to build the landing page nicely.',
         descriptionRo: 'A fost un landing page real pentru una dintre companiile BlackRock. Voiau să folosească video-ul din fundal, așa că am animat headerul și dashboardul demo ca să construiesc mai natural pagina.',
         type: 'video',
         src: '/media/playground/6.webm',
@@ -1681,7 +1681,7 @@ const playgroundItems = {
     'interaction-study': {
         title: 'macOS app for my Govee lights',
         titleRo: 'Aplicație macOS pentru luminile mele Govee',
-        description: 'Govee does not have a macOS app to control their lights, so I designed and built one tailored to my needs, with functionality for both LAN and Cloud using the Govee API.',
+        description: 'Govee doesn\'t have a macOS app to control their lights, so I designed and built one tailored to my needs, with functionality for both LAN and Cloud using the Govee API.',
         descriptionRo: 'Govee nu are o aplicație macOS pentru controlul luminilor, așa că am designuit și construit una adaptată nevoilor mele, cu funcționalitate atât prin LAN, cât și prin Cloud, folosind API-ul Govee.',
         type: 'video',
         src: '/media/playground/govee.webm',
@@ -1689,7 +1689,7 @@ const playgroundItems = {
     'visual-direction': {
         title: 'Coffee shop branding',
         titleRo: 'Branding pentru coffee shop',
-        description: 'I do not really do branding, but this one was for a friend, and I liked the outcome.',
+        description: 'I don\'t really do branding, but this one was for a friend, and I liked the outcome.',
         descriptionRo: 'Nu prea fac branding, dar acesta a fost pentru un prieten și mi-a plăcut direcția în care a ieșit.',
         type: 'image',
         src: '/media/playground/pungicafea-az.jpg',
@@ -1706,7 +1706,7 @@ const playgroundItems = {
     'app-flow': {
         title: 'Logo animation',
         titleRo: 'Animație de logo',
-        description: 'Played around with logo animations.',
+        description: 'Played around with logo animations',
         descriptionRo: 'O explorare rapidă cu animații de logo.',
         type: 'video',
         src: '/media/playground/5.webm',
@@ -1714,7 +1714,7 @@ const playgroundItems = {
     'ui-exploration': {
         title: 'Visual exploration',
         titleRo: 'Explorare vizuală',
-        description: 'This is actual client work. I was showing the difference between using icons and animations to convey meaning, but the client did not have the budget necessary for it.',
+        description: 'This is actual client work. I was showing the difference between using icons and animations to convey meaning. But the client didn\'t have the budget necessary for it.',
         descriptionRo: 'Aici este muncă reală pentru client. Arătam diferența dintre folosirea iconurilor și a animațiilor pentru a transmite sens, dar clientul nu avea bugetul necesar pentru direcția asta.',
         type: 'image',
         src: '/media/playground/illustrationvsicon.jpg',
@@ -1731,7 +1731,7 @@ const playgroundItems = {
     'mobile-detail': {
         title: 'Card animation',
         titleRo: 'Animație de card',
-        description: 'Did this animation in Jitter to show the client how we might animate charts like these.',
+        description: 'Did this animation in Jitter to show the client how we might animate charts like these',
         descriptionRo: 'Am făcut animația în Jitter ca să-i arăt clientului cum am putea anima grafice de genul acesta.',
         type: 'video',
         src: '/media/playground/4.webm',
@@ -1739,7 +1739,7 @@ const playgroundItems = {
     'identity-study': {
         title: 'Identity study',
         titleRo: 'Studiu de identitate',
-        description: 'Played around in Photoshop to test an announcement banner.',
+        description: 'Played around in Photoshop to test an announcement banner',
         descriptionRo: 'M-am jucat în Photoshop ca să testez un banner de anunț.',
         type: 'image',
         src: '/media/playground/furtuna0525.webp',
@@ -1774,7 +1774,7 @@ function getPlaygroundDetailItem() {
 }
 
 function getPlaygroundDetailCopy(item) {
-    const isRomanian = document.documentElement.lang === 'ro' || window.location.pathname.startsWith('/playground/');
+    const isRomanian = window.location.pathname.startsWith('/playground/');
 
     return {
         title: isRomanian ? item.titleRo || item.title : item.title,
