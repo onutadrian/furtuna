@@ -1,0 +1,42 @@
+Options -MultiViews
+
+RewriteEngine On
+
+# Force HTTPS.
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# Canonical host: non-www.
+RewriteCond %{HTTP_HOST} ^www\.furtuna\.ro$ [NC]
+RewriteRule ^ https://furtuna.ro%{REQUEST_URI} [R=301,L]
+
+# Canonical clean URLs: /path/index.html -> /path/
+RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.html[\s?] [NC]
+RewriteRule ^(.*/)?index\.html$ /$1 [R=301,L]
+
+# Static asset MIME types.
+AddType image/webp .webp
+AddType video/webm .webm
+AddType image/svg+xml .svg
+AddType application/javascript .js .mjs
+AddType font/woff2 .woff2
+
+# Static asset caching. CSS/JS stay short because the site uses query versions manually.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType video/webm "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType text/css "access plus 1 day"
+  ExpiresByType application/javascript "access plus 1 day"
+</IfModule>
+
+# Basic security headers.
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+</IfModule>
