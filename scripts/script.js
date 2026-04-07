@@ -2041,6 +2041,175 @@ async function playgroundDetailTransitionEnter(data) {
     playgroundDetailTransitionScrollTop = 0;
 }
 
+const mainNavTransitionNamespaces = ['home', 'allWork', 'capabilities', 'playground', 'resume'];
+const mainNavTransitionDefaults = {
+    scale: 0.78,
+    yVh: -30,
+    overlayOpacity: 0.75,
+    duration: 1,
+};
+
+function isMainNavTransition(data) {
+    const currentNamespace = data.current.namespace;
+    const nextNamespace = data.next.namespace;
+
+    return mainNavTransitionNamespaces.includes(currentNamespace) && mainNavTransitionNamespaces.includes(nextNamespace);
+}
+
+async function mainNavCrossfadeTransition(data) {
+    const currentContainer = data.current.container;
+    const nextContainer = data.next.container;
+
+    if (!currentContainer || !nextContainer) return;
+
+    window.FurtunaPlaygroundWebGL?.destroy?.();
+    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    resetProjectViewportTransition();
+
+    const currentHeader = currentContainer.querySelector('.header-wrapper');
+    const nextHeader = nextContainer.querySelector('.header-wrapper');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const currentScrollTop = window.scrollY || document.documentElement.scrollTop || 0;
+    const currentHeaderParent = currentHeader?.parentNode;
+    const currentHeaderNextSibling = currentHeader?.nextSibling;
+    const overlayElement = document.createElement('div');
+    const previousBodyBackground = document.body.style.backgroundColor;
+    const transitionSettings = mainNavTransitionDefaults;
+
+    headerScrollListener = null;
+    isScrollProgrammatic = true;
+
+    gsap.killTweensOf([currentContainer, nextContainer, currentHeader, nextHeader].filter(Boolean));
+
+    if (currentHeader) {
+        document.body.appendChild(currentHeader);
+    }
+
+    overlayElement.className = 'main-nav-transition-overlay';
+    currentContainer.appendChild(overlayElement);
+    document.body.style.backgroundColor = '#000000';
+
+    gsap.set(currentContainer, {
+        position: 'fixed',
+        top: -currentScrollTop,
+        left: 0,
+        width: '100%',
+        minHeight: '100vh',
+        overflow: 'hidden',
+        background: '#ffffff',
+        transformOrigin: '50% 0%',
+        zIndex: 1,
+        pointerEvents: 'none',
+        force3D: true,
+    });
+
+    gsap.set(overlayElement, {
+        position: 'absolute',
+        inset: 0,
+        background: '#000000',
+        opacity: 0,
+        pointerEvents: 'none',
+        zIndex: 900,
+    });
+
+    lenis.scrollTo(0, { immediate: true });
+
+    gsap.set(nextContainer, {
+        position: 'fixed',
+        inset: 0,
+        width: '100%',
+        height: '100vh',
+        overflow: 'hidden',
+        background: '#ffffff',
+        zIndex: 400,
+        pointerEvents: 'none',
+        autoAlpha: 1,
+        clipPath: prefersReducedMotion ? 'inset(0% 0% 0% 0%)' : 'inset(100% 0% 0% 0%)',
+        yPercent: prefersReducedMotion ? 0 : 8,
+        force3D: true,
+    });
+
+    if (currentHeader) {
+        gsap.set(currentHeader, {
+            yPercent: 0,
+            autoAlpha: 1,
+            zIndex: 700,
+        });
+    }
+
+    if (nextHeader) {
+        gsap.set(nextHeader, {
+            yPercent: 0,
+            autoAlpha: 0,
+        });
+    }
+
+    if (!prefersReducedMotion) {
+        const timeline = gsap.timeline({
+            defaults: {
+                ease: 'power3.inOut',
+            },
+        });
+
+        timeline
+            .to(currentContainer, {
+                scale: transitionSettings.scale,
+                y: `${transitionSettings.yVh}vh`,
+                borderRadius: '1.25rem',
+                duration: transitionSettings.duration,
+                ease: 'power2.inOut',
+            }, 0)
+            .to(overlayElement, {
+                opacity: transitionSettings.overlayOpacity,
+                duration: transitionSettings.duration,
+                ease: 'power2.inOut',
+            }, 0)
+            .to(nextContainer, {
+                clipPath: 'inset(0% 0% 0% 0%)',
+                yPercent: 0,
+                duration: transitionSettings.duration,
+                ease: 'power2.inOut',
+            }, 0);
+
+        if (nextHeader) {
+            timeline.to(nextHeader, {
+                autoAlpha: 1,
+                duration: 0.24,
+                ease: 'power2.out',
+            }, 0.84);
+        }
+
+        await new Promise(resolve => {
+            timeline.eventCallback('onComplete', resolve);
+        });
+    }
+
+    if (nextHeader) {
+        gsap.set(nextHeader, {
+            autoAlpha: 1,
+            yPercent: 0,
+        });
+    }
+
+    if (currentHeader && currentHeaderParent) {
+        currentHeaderParent.insertBefore(currentHeader, currentHeaderNextSibling);
+    }
+
+    overlayElement.remove();
+
+    gsap.set(currentContainer, {
+        autoAlpha: 0,
+        pointerEvents: 'none',
+    });
+
+    gsap.set(nextContainer, {
+        clearProps: 'position,inset,top,left,right,bottom,width,height,overflow,background,zIndex,pointerEvents,clipPath,opacity,visibility,transform,borderRadius',
+    });
+
+    document.body.style.backgroundColor = previousBodyBackground;
+    isScrollProgrammatic = false;
+}
+
 function playgroundPage(container = document) {
 
     if (container.querySelector(`.playground-webgl-grid`)) {
@@ -2466,6 +2635,15 @@ if (window.location.protocol === 'file:') {
             },
             async enter(data) {
                 await playgroundDetailTransitionEnter(data);
+            }
+        }, {
+            name: 'mainNavCrossfadeTransition',
+            sync: true,
+            custom(data) {
+                return isMainNavTransition(data);
+            },
+            leave(data) {
+                return mainNavCrossfadeTransition(data);
             }
         }, {
             name: 'defaultTransition',

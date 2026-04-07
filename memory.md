@@ -1,6 +1,6 @@
 # Project Memory
 
-Last updated: 2026-03-12
+Last updated: 2026-04-07
 
 ## What this project is
 - Static multi-page portfolio/agency site (no app framework, no package manager config in repo).
@@ -11,6 +11,7 @@ Last updated: 2026-03-12
 - Smooth scrolling: Lenis (CDN).
 - Animation + interactions: GSAP + Flip + ScrollTrigger + Draggable + InertiaPlugin + SplitText (CDN).
 - Page transitions: Barba.js (`@barba/core` via CDN).
+- Playground WebGL: local Three.js ES module vendor files under `vendor/three/` plus `scripts/playground-webgl.js`.
 - Tracking scripts embedded in page heads: Hotjar + GA (`gtag`).
 
 ## Core code locations
@@ -20,11 +21,13 @@ Last updated: 2026-03-12
 - Compiled CSS artifact: `styles/style.css` (+ `styles/style.css.map`)
 
 ## Barba namespaces and JS entry points
-- `home` -> homepage interactions (`projectsSection`, `becauseWeAnimation`, `testimonialsSection`, `pageReveal`, etc.)
-- `project` -> case-study interactions (`caseStudyAnimations`, compare/drag sections, project transition enter)
+- `home` -> homepage interactions (`homeHeroIntro`, featured projects, intro/project/footer animations).
+- `project` -> case-study interactions (`caseStudyAnimations`, compare/drag sections, `projectPageEnter` intro).
 - `allWork` -> work listing interactions (`workPage`)
 - `capabilities` -> overlay behavior (`capabilitiesOverlay`)
-- `playground` -> fullscreen media behavior (`playgroundPage`)
+- `playground` -> WebGL gallery when `.playground-webgl-grid` exists; legacy masonry behavior remains as fallback when `.playground-grid` exists.
+- `playgroundDetail` -> generic playground detail page populated from `playgroundItems` in `scripts/script.js`.
+- `resume` -> resume page initialization.
 
 ## Editing workflow notes
 - This is a shared-class, shared-script setup: most pages depend on common selectors and helper functions in `scripts/script.js`.
@@ -35,19 +38,131 @@ Last updated: 2026-03-12
   - Romanian is primary under root paths (e.g. `/`, `/work/...`).
   - English mirrors all main pages under `/en/...` with the same folder depth.
   - Because `/en` adds one extra path segment, EN pages must use one extra `../` for shared assets (`media/`, `styles/`, `scripts/`).
+- Barba keeps the original document shell/head around during navigation, so page language logic should prefer the URL path over `document.documentElement.lang` for Barba-populated content. Example: playground detail copy uses `/playground/...` for RO and `/en/playground/...` for EN.
 - If adding a new page type, set `data-barba-namespace` and register matching behavior in `barba.init({ views: [...] })`.
 - Prefer editing SCSS sources (`style.scss` + partials) and keep compiled `style.css` in sync.
 
 ## Local dev / preview
 - No local build/dev scripts are present in repo.
 - Serve as a static site from repo root (example): `python3 -m http.server 8080` then open `http://localhost:8080`.
+- This project is deployed as static files on Apache/Romarg via git pull. Avoid build-step-only solutions. Keep vendored browser dependencies local when needed.
 
 ## Current repo state notes
+- Correct remote: `origin -> git@github.com:onutadrian/furtuna.git`
+- Working branch: `fix-detached-changes`
+- Live/deploy branch: `production`
+- As of 2026-04-07, both `origin/fix-detached-changes` and `origin/production` point at commit `02d61bd` (`Fix English playground detail copy`).
 - Git working tree already has existing `.DS_Store` modifications:
   - `.DS_Store`
   - `media/.DS_Store`
   - `media/work/.DS_Store`
-- `playground/index.html` currently contains duplicated `.cookies-wrapper` markup.
+  - `work/.DS_Store`
+- Also ignore untracked local junk unless explicitly requested:
+  - `CV`
+  - `work/all/.DS_Store`
+- Do not push to the old `thestormstudio` repository. That was corrected earlier; use `onutadrian/furtuna`.
+
+## Current product direction
+- This is now a bilingual personal portfolio for the Romanian market, not a studio site.
+- Romanian is the primary language. English is mirrored under `/en/`.
+- Tone target: signal judgment, taste, and seniority. Avoid AI-sounding translation patterns like repetitive "this, not that" constructions.
+- This is aimed at roles/jobs Adrian applies to. It should show work and create enough interest for an interview, not push a heavy CTA or "hire me now" conversion flow.
+- Header/nav follows the Figma homepage direction: logo SVG (`media/furtunalogo.svg`), HOME/RESUME/WORK/PLAYGROUND/CONTACT, language switch after contact.
+- Header should scroll normally, hide on meaningful downward scroll, and reappear on upward scroll. It now uses explicit `yPercent` set/tween logic rather than a reversible `from()` tween because the old animation model flickered.
+
+## Homepage state
+- Homepage was rebuilt from Figma into a 1920px-wide shell (`width-limiter-home`) with billboard hero, editorial intro section, static featured project cards, and the new footer.
+- Hero background assets live under `media/home/`.
+- Romanian hero heading:
+  - `Nu doar ecrane.`
+  - `Sisteme care susțin produse reale.`
+- Romanian hero support line:
+  - `Muncă ancorată în lumea reală, în comportamentul oamenilor, dincolo de scenarii artificiale.`
+- Romanian intro section:
+  - `Între logică de sistem și implementare reală.`
+  - `Colaborez aproape de produs și de dezvoltare, astfel încât designul să clarifice din timp deciziile importante, nu să lase ambiguități pentru mai târziu.`
+- Homepage intro title spans 8 columns and the supporting text is `2rem` on desktop.
+- Homepage splash/page-reveal was removed.
+
+## Work / case-study state
+- Work listing order should show `Suvoda` first.
+- Work cards use the homepage-style metadata pattern: `_meta`, `_heading-group`, `_client`, `_title`, `_description`.
+- Known metadata:
+  - `Suvoda / Patient Experience / Experiență pentru pacienți în studii clinice`
+  - `Elifinty / EliHub / Sănătate financiară pentru gospodării vulnerabile`
+  - `EdenRed / Benefit / Platformă de beneficii pentru angajați`
+  - `IBM / Comprehend / Corporate workforce training`
+  - `Medlife / SanoPass / Subscription based wellness app`
+- The old homepage-to-project viewport morph was removed. Project navigation now uses a normal Barba swap and `projectPageEnter()` intro animation.
+- Project meta reveal has a slight delay so the animation is visible.
+- Elifinty next project should point to Suvoda.
+- Suvoda case study asset paths are case-sensitive on Apache/Linux:
+  - use `DS.webp`, not `ds.webp`
+  - use `light.webp`, not `LIGHT.webp`
+  - use `SignIn.webp`, not `signin.webp`
+- Testimonials were updated to address Adrian directly instead of STORM/them where appropriate.
+
+## Resume state
+- Resume pages exist at `/resume/` and `/en/resume/`.
+- Resume page follows the rebuilt Figma structure:
+  - `resume-content`
+  - `resume-hero`
+  - `resume-hero-content`
+  - `resume-history-row`
+  - `resume-section--writing`
+- Writing links are real Medium links with local hover previews under `media/resume/*.webp`.
+- Resume entry grid uses `grid-template-columns: 6rem minmax(0, 1fr)` and `column-gap: 5rem`.
+
+## Playground WebGL state
+- Playground was changed from masonry cards to a Codrops-inspired GSAP + Three.js scroll-revealed WebGL gallery.
+- No Astro/Vite/build step. Three is vendored locally:
+  - `vendor/three/three.module.min.js`
+  - `vendor/three/three.core.min.js`
+- Main module:
+  - `scripts/playground-webgl.js`
+- The module uses DOM media for layout/measurement and renders matching Three.js planes on a fixed canvas.
+- It supports images and videos:
+  - image textures use `THREE.TextureLoader` and `THREE.SRGBColorSpace`
+  - video textures use `THREE.VideoTexture`, `THREE.NoColorSpace`, and a `uDecodeTexture` shader uniform so videos do not look over-bright after the image color fix
+- Shader note: keep `#include <colorspace_fragment>` only. Do not add `#include <colorspace_pars_fragment>` because this Three build already injects those helpers and duplicate definitions break shader compilation.
+- The gallery dynamically loads only when `.playground-webgl-grid` exists. The old masonry code remains a fallback for `.playground-grid`.
+- WebGL gallery items are links with:
+  - `data-webgl-media`
+  - `data-playground-detail-link`
+  - `data-playground-slug`
+  - `data-playground-transition-media`
+- Generic detail pages:
+  - `/playground/detail/index.html?item=...`
+  - `/en/playground/detail/index.html?item=...`
+- Detail copy comes from `playgroundItems` in `scripts/script.js`. Language selection is URL-path based: `/playground/` -> RO, `/en/playground/` -> EN.
+- Detail transition uses Barba + GSAP Flip with the actual clicked DOM media. WebGL gallery cleanup must preserve the moved media so videos do not pause:
+  - `window.FurtunaPlaygroundWebGL?.destroy?.({ preserveMedia: media })`
+- Portrait detail media should not fill the full width. `playgroundDetailTransitionEnter()` caps portrait shells against viewport height using `calc((100vh - 13rem) * aspectRatio)`.
+- Media labels are not part of the ScrollTrigger text reveal. They previously existed but were invisible/clipped. Keep:
+  - JS clearing inline opacity/visibility/transform on `.playground-webgl-item--media span`
+  - CSS `.playground .playground-webgl-item--media { overflow: visible; }`
+
+## Playground current item order and copy
+- Current first four items:
+  - `system-prototype`
+  - `interaction-study`
+  - `prototype-pass`
+  - `hero-prototype`
+- Other items:
+  - `motion-systems`
+  - `visual-direction`
+  - `app-flow`
+  - `ui-exploration`
+  - `mobile-detail`
+  - `identity-study`
+  - `flow-fragment`
+- RO page copy:
+  - `Explorări, prototipuri și fragmente vizuale din produse reale.`
+  - `Un playground mai aproape de proces: încercări, sisteme, eșecuri utile și direcții care au meritat păstrate.`
+- EN page copy:
+  - `Explorations, prototypes, and visual fragments from real products.`
+  - `A playground closer to the process: attempts, systems, useful failures, and directions worth keeping.`
+- English detail copy should remain English on `/en/playground/detail/...`; the bug was stale Barba document language.
 
 ## Update log
 - 2026-03-12: Initial project scan and baseline memory created.

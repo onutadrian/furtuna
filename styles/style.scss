@@ -3,6 +3,10 @@
 @import 'project-pages';
 @import 'animations';
 
+html {
+    scrollbar-gutter: stable;
+}
+
 body {
     color: $black;
     -webkit-font-smoothing: subpixel-antialiased;
