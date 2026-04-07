@@ -4146,4 +4146,181 @@ footer ._logo {
   }
 }
 
+
+.playground-webgl-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
+
+.playground .playground-webgl-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  column-gap: 1rem;
+  row-gap: 28vh;
+  padding-bottom: 18vh;
+}
+@media screen and (max-width: 1024px) {
+  .playground .playground-webgl-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+    padding-bottom: 5rem;
+  }
+}
+
+.playground .playground-webgl-item {
+  grid-column: var(--c)/span var(--s);
+  grid-row: var(--r);
+  position: relative;
+  min-width: 0;
+}
+@media screen and (max-width: 1024px) {
+  .playground .playground-webgl-item {
+    width: 100%;
+  }
+}
+
+.playground .playground-webgl-item--media {
+  aspect-ratio: var(--ar, 16/9);
+  overflow: hidden;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+.playground .playground-webgl-item--media img,
+.playground .playground-webgl-item--media video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: opacity 0.2s ease;
+}
+.playground .playground-webgl-item--media span {
+  position: absolute;
+  z-index: 3;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  font-family: "mainfont", sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 120%;
+  letter-spacing: 0.02rem;
+  color: #111111 !important;
+}
+
+.playground .playground-webgl-item--copy {
+  align-self: end;
+  position: relative;
+  z-index: 3;
+}
+.playground .playground-webgl-item--copy p {
+  font-family: "mainfont", sans-serif;
+  font-size: 1.875rem;
+  font-weight: 400;
+  line-height: 1.12;
+  color: #684d4d !important;
+}
+
+.is-webgl-ready .playground-webgl-item--media.is-webgl-media-ready img,
+.is-webgl-ready .playground-webgl-item--media.is-webgl-media-ready video {
+  opacity: 0;
+}
+
+.playground-detail-page {
+  min-height: 100vh;
+  padding: 9.5rem 0 7.5rem;
+  background: #ffffff;
+}
+@media screen and (max-width: 1024px) {
+  .playground-detail-page {
+    padding: 7.5rem 0 5rem;
+  }
+}
+
+.playground-detail-back {
+  display: inline-block;
+  margin-bottom: 4rem;
+  font-family: "mainfont", sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 120%;
+  color: #545454;
+}
+
+.playground-detail-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 24rem) minmax(0, 1fr);
+  gap: 7.5rem;
+  align-items: end;
+}
+@media screen and (max-width: 1024px) {
+  .playground-detail-layout {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+}
+
+.playground-detail-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.playground-detail-copy ._eyebrow {
+  font-family: "mainfont", sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 120%;
+  color: #545454;
+}
+.playground-detail-copy h1 {
+  font-family: "mainfont", sans-serif;
+  font-size: 3.75rem;
+  font-weight: 400;
+  line-height: 0.98;
+  color: #684d4d;
+}
+@media screen and (max-width: 1024px) {
+  .playground-detail-copy h1 {
+    font-family: "mainfont", sans-serif;
+    font-size: 2.25rem;
+    font-weight: 400;
+    line-height: 100%;
+  }
+}
+.playground-detail-copy p:not(._eyebrow) {
+  font-family: "mainfont", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1.2;
+  color: #545454;
+}
+
+.playground-detail-media-shell {
+  height: calc(100vh - 13rem);
+  min-height: 36rem;
+  overflow: hidden;
+  background: #f3f3f3;
+}
+@media screen and (max-width: 1024px) {
+  .playground-detail-media-shell {
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 4/5;
+  }
+}
+
+.playground-detail-media {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 /*# sourceMappingURL=style.css.map */

@@ -15,6 +15,7 @@ gsap.registerPlugin(Flip, ScrollTrigger, Draggable, InertiaPlugin, SplitText)
 let scrollDirection = null;
 lenis.on('scroll', (e) => {
     scrollDirection = e.direction
+    ScrollTrigger.update();
     if (headerScrollListener) {
         headerScrollListener(e);
     }
@@ -1668,7 +1669,321 @@ function workPage(container = document) {
     })
 }
 
+const playgroundItems = {
+    'motion-systems': {
+        title: 'Motion systems',
+        description: 'A small motion study from the playground archive.',
+        type: 'video',
+        src: '/media/playground/6.webm',
+    },
+    'interaction-study': {
+        title: 'Interaction study',
+        description: 'A vertical prototype pass exploring timing, interface response, and interface feel.',
+        type: 'video',
+        src: '/media/playground/govee.webm',
+    },
+    'visual-direction': {
+        title: 'Visual direction',
+        description: 'A static visual direction fragment from the playground archive.',
+        type: 'image',
+        src: '/media/playground/pungicafea-az.jpg',
+        alt: 'Two bags of coffee on an espresso machine.',
+    },
+    'hero-prototype': {
+        title: 'Hero prototype',
+        description: 'A wide hero prototype exploring background motion and editorial pacing.',
+        type: 'video',
+        src: '/media/playground/portfolio-background-hero-testimonials.webm',
+    },
+    'app-flow': {
+        title: 'App flow',
+        description: 'A product flow fragment from a mobile interface prototype.',
+        type: 'video',
+        src: '/media/playground/5.webm',
+    },
+    'ui-exploration': {
+        title: 'UI exploration',
+        description: 'A small comparison study around visual language and interface assets.',
+        type: 'image',
+        src: '/media/playground/illustrationvsicon.jpg',
+        alt: 'Side by side screens comparing illustrations vs icons.',
+    },
+    'prototype-pass': {
+        title: 'Prototype pass',
+        description: 'A product prototype pass focused on rhythm and interaction states.',
+        type: 'video',
+        src: '/media/playground/screen-recording-2025-05-23-11-41-42.webm',
+    },
+    'mobile-detail': {
+        title: 'Mobile detail',
+        description: 'A vertical mobile detail interaction from the playground archive.',
+        type: 'video',
+        src: '/media/playground/4.webm',
+    },
+    'identity-study': {
+        title: 'Identity study',
+        description: 'A static identity direction fragment from the playground archive.',
+        type: 'image',
+        src: '/media/playground/furtuna0525.webp',
+        alt: 'Man walking by a billboard.',
+    },
+    'system-prototype': {
+        title: 'System prototype',
+        description: 'A systems prototype exploring structure and interface behavior.',
+        type: 'video',
+        src: '/media/playground/screen-recording-2026-02-09-13-32-35.webm',
+    },
+    'flow-fragment': {
+        title: 'Flow fragment',
+        description: 'A compact flow fragment from a product prototype.',
+        type: 'video',
+        src: '/media/playground/screen-recording-2025-10-27-13-16-16.webm',
+    },
+};
+
+let playgroundDetailTransitionItem = null;
+let playgroundDetailTransitionMedia = null;
+let playgroundDetailTransitionState = null;
+let playgroundDetailTransitionScrollTop = 0;
+
+function getPlaygroundDetailItem() {
+    const params = new URLSearchParams(window.location.search);
+    return playgroundItems[params.get('item')] || playgroundItems['motion-systems'];
+}
+
+function createPlaygroundDetailMedia(item) {
+    const media = document.createElement(item.type === 'video' ? 'video' : 'img');
+    media.className = 'playground-detail-media';
+
+    if (item.type === 'video') {
+        media.src = item.src;
+        media.muted = true;
+        media.loop = true;
+        media.playsInline = true;
+        media.setAttribute('playsinline', '');
+        media.setAttribute('preload', 'metadata');
+    } else {
+        media.src = item.src;
+        media.alt = item.alt || item.title;
+        media.loading = 'eager';
+    }
+
+    return media;
+}
+
+function populatePlaygroundDetail(container = document, options = {}) {
+    const item = playgroundDetailTransitionItem || getPlaygroundDetailItem();
+    const title = container.querySelector('[data-playground-detail-title]');
+    const description = container.querySelector('[data-playground-detail-description]');
+    const mediaShell = container.querySelector('[data-playground-detail-media]');
+
+    if (title) title.textContent = item.title;
+    if (description) description.textContent = item.description;
+
+    if (!options.skipMedia && mediaShell && !mediaShell.querySelector('img, video')) {
+        mediaShell.appendChild(createPlaygroundDetailMedia(item));
+        mediaShell.querySelector('video')?.play?.().catch(() => {});
+    }
+
+    return item;
+}
+
+function playgroundDetailPage(container = document) {
+    cookiesConsent(container);
+    headerScrollAnimation(container);
+    toggleMobileMenu(container);
+    initBlobs(container);
+    populatePlaygroundDetail(container);
+
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            ScrollTrigger.refresh();
+        });
+    });
+}
+
+function preparePlaygroundDetailLinks(container = document) {
+    container.querySelectorAll('[data-playground-detail-link]').forEach(link => {
+        link.addEventListener('click', () => {
+            container.querySelectorAll('[data-playground-detail-link]').forEach(item => {
+                item.removeAttribute('data-playground-link-active');
+            });
+            link.setAttribute('data-playground-link-active', 'true');
+            playgroundDetailTransitionItem = playgroundItems[link.getAttribute('data-playground-slug')];
+        });
+    });
+}
+
+function getActivePlaygroundMedia(container = document) {
+    const activeLink = container.querySelector('[data-playground-link-active="true"]');
+    return activeLink?.querySelector('[data-playground-transition-media]');
+}
+
+function getMediaAspectRatio(media) {
+    if (!media) return null;
+
+    const link = media.closest('[data-playground-detail-link]');
+    const cssRatio = link ? getComputedStyle(link).getPropertyValue('--ar').trim() : '';
+    const cssRatioParts = cssRatio.split('/').map(part => Number(part.trim()));
+
+    if (cssRatioParts.length === 2 && cssRatioParts.every(Boolean)) {
+        return `${cssRatioParts[0]} / ${cssRatioParts[1]}`;
+    }
+
+    if (media.tagName === 'VIDEO' && media.videoWidth && media.videoHeight) {
+        return `${media.videoWidth} / ${media.videoHeight}`;
+    }
+
+    if (media.tagName === 'IMG' && media.naturalWidth && media.naturalHeight) {
+        return `${media.naturalWidth} / ${media.naturalHeight}`;
+    }
+
+    return null;
+}
+
+async function playgroundDetailTransitionBefore(data) {
+    const media = getActivePlaygroundMedia(data.current.container);
+
+    if (!media) {
+        window.FurtunaPlaygroundWebGL?.destroy?.();
+        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+        return;
+    }
+
+    const activeLink = media.closest('[data-playground-detail-link]');
+    playgroundDetailTransitionItem = playgroundItems[activeLink?.getAttribute('data-playground-slug')] || playgroundDetailTransitionItem;
+    playgroundDetailTransitionMedia = media;
+
+    media.pause?.();
+    gsap.set(media, { autoAlpha: 0 });
+
+    const gallery = window.FurtunaPlaygroundWebGL;
+    const tl = gsap.timeline({ paused: true });
+
+    gallery?.medias?.forEach(item => {
+        item.scrollTween?.scrollTrigger?.kill();
+        if (item.media === media) {
+            const currentProgress = item.material.uniforms.uProgress.value;
+            tl.to(item.material.uniforms.uProgress, {
+                value: 1,
+                duration: Math.max(0.15, 0.7 * (1 - currentProgress)),
+                ease: 'linear',
+                onComplete: () => {
+                    gsap.set(media, { autoAlpha: 1, visibility: 'visible' });
+                    gsap.set(item.material.uniforms.uProgress, { value: 0 });
+                }
+            }, 0);
+        } else {
+            const currentProgress = item.material.uniforms.uProgress.value;
+            tl.to(item.material.uniforms.uProgress, {
+                value: 0,
+                duration: Math.max(0.15, 0.7 * currentProgress),
+                ease: 'linear'
+            }, 0);
+        }
+    });
+
+    tl.to(data.current.container.querySelectorAll('.playground-hero ._heading, .playground-webgl-item--copy p, .playground-webgl-item--media span'), {
+        autoAlpha: 0,
+        y: -16,
+        duration: 0.25,
+        ease: 'power2.out',
+    }, 0);
+
+    await new Promise(resolve => {
+        tl.eventCallback('onComplete', resolve);
+        tl.play();
+    });
+}
+
+function playgroundDetailTransitionLeave(data) {
+    if (!playgroundDetailTransitionMedia) return;
+
+    playgroundDetailTransitionScrollTop = window.scrollY || document.documentElement.scrollTop || 0;
+    gsap.set(data.current.container, {
+        position: 'fixed',
+        top: -playgroundDetailTransitionScrollTop,
+        left: 0,
+        width: '100%',
+        zIndex: 1000,
+    });
+
+    playgroundDetailTransitionState = Flip.getState(playgroundDetailTransitionMedia);
+}
+
+function playgroundDetailTransitionBeforeEnter() {
+    isScrollProgrammatic = true;
+    lenis.scrollTo(0, {
+        immediate: true,
+        onComplete: () => {
+            isScrollProgrammatic = false;
+        }
+    });
+}
+
+async function playgroundDetailTransitionEnter(data) {
+    populatePlaygroundDetail(data.next.container, { skipMedia: Boolean(playgroundDetailTransitionMedia) });
+
+    const mediaShell = data.next.container.querySelector('[data-playground-detail-media]');
+    const media = playgroundDetailTransitionMedia;
+    const state = playgroundDetailTransitionState;
+
+    if (!mediaShell || !media || !state) {
+        populatePlaygroundDetail(data.next.container);
+        playgroundDetailTransitionMedia = null;
+        playgroundDetailTransitionState = null;
+        playgroundDetailTransitionItem = null;
+        return;
+    }
+
+    mediaShell.innerHTML = '';
+    const mediaAspectRatio = getMediaAspectRatio(media);
+    if (mediaAspectRatio) {
+        mediaShell.style.aspectRatio = mediaAspectRatio;
+        mediaShell.style.height = 'auto';
+        mediaShell.style.minHeight = '0';
+    }
+    media.classList.add('playground-detail-media');
+    mediaShell.appendChild(media);
+
+    gsap.set(data.next.container.querySelectorAll('[data-playground-detail-copy] > *'), { autoAlpha: 0, y: 24 });
+    gsap.set(media, { width: '100%', height: '100%', objectFit: 'cover', display: 'block', autoAlpha: 1 });
+    media.play?.().catch(() => {});
+
+    await new Promise(resolve => {
+        Flip.from(state, {
+            absolute: true,
+            duration: 1,
+            ease: 'power3.inOut',
+            onComplete: resolve,
+        });
+    });
+
+    gsap.to(data.next.container.querySelectorAll('[data-playground-detail-copy] > *'), {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.6,
+        stagger: 0.06,
+        ease: 'power3.out',
+    });
+
+    window.FurtunaPlaygroundWebGL?.destroy?.({ preserveMedia: media });
+    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    media.play?.().catch(() => {});
+    playgroundDetailTransitionMedia = null;
+    playgroundDetailTransitionState = null;
+    playgroundDetailTransitionItem = null;
+    playgroundDetailTransitionScrollTop = 0;
+}
+
 function playgroundPage(container = document) {
+
+    if (container.querySelector(`.playground-webgl-grid`)) {
+        preparePlaygroundDetailLinks(container);
+        return import('/scripts/playground-webgl.js')
+            .then(module => module.initPlaygroundWebGLGallery({ container, gsap, ScrollTrigger }))
+            .catch(error => console.error('Failed to initialize playground WebGL gallery', error));
+    }
 
     let mm = gsap.matchMedia();
     let playgroundGrid = container.querySelector(`.playground-grid`)
@@ -2007,15 +2322,26 @@ async function runViewInitializers(namespace, container) {
             headerScrollAnimation(container);
             toggleMobileMenu(container)
             initBlobs(container);
-            playgroundPage(container);
+
+            isScrollProgrammatic = true;
+            lenis.scrollTo(0, {
+                immediate: true,
+                onComplete: () => {
+                    isScrollProgrammatic = false;
+                }
+            })
+
+            await playgroundPage(container);
 
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
                     ScrollTrigger.refresh();
                 });
             });
+            break;
 
-            await sleep(500)
+        case 'playgroundDetail':
+            playgroundDetailPage(container);
 
             isScrollProgrammatic = true;
             lenis.scrollTo(0, {
@@ -2057,8 +2383,29 @@ if (window.location.protocol === 'file:') {
 } else {
     barba.init({
         transitions: [{
+            name: 'playgroundDetailTransition',
+            from: {
+                namespace: ['playground']
+            },
+            to: {
+                namespace: ['playgroundDetail']
+            },
+            async before(data) {
+                await playgroundDetailTransitionBefore(data);
+            },
+            leave(data) {
+                playgroundDetailTransitionLeave(data);
+            },
+            beforeEnter() {
+                playgroundDetailTransitionBeforeEnter();
+            },
+            async enter(data) {
+                await playgroundDetailTransitionEnter(data);
+            }
+        }, {
             name: 'defaultTransition',
             leave() {
+                window.FurtunaPlaygroundWebGL?.destroy?.();
                 ScrollTrigger.getAll().forEach(trigger => trigger.kill());
                 resetProjectViewportTransition();
             }
@@ -2091,6 +2438,12 @@ if (window.location.protocol === 'file:') {
                 namespace: 'playground',
                 async afterEnter(data) {
                     await runViewInitializers('playground', data.next.container);
+                }
+            },
+            {
+                namespace: 'playgroundDetail',
+                async afterEnter(data) {
+                    await runViewInitializers('playgroundDetail', data.next.container);
                 }
             },
             {
