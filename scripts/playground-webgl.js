@@ -324,7 +324,10 @@ class PlaygroundWebGLGallery {
     }
 
     createTextAnimations() {
-        const textElements = Array.from(this.container.querySelectorAll('.playground-webgl-item--copy p, .playground-webgl-item--media span'));
+        const labels = Array.from(this.container.querySelectorAll('.playground-webgl-item--media span'));
+        this.gsap.set(labels, { clearProps: 'opacity,visibility,transform' });
+
+        const textElements = Array.from(this.container.querySelectorAll('.playground-webgl-item--copy p'));
         this.gsap.set(textElements, { autoAlpha: 0, y: 24 });
 
         this.textAnimations = textElements.map(element => this.gsap.to(element, {

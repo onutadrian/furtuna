@@ -1671,71 +1671,93 @@ function workPage(container = document) {
 
 const playgroundItems = {
     'motion-systems': {
-        title: 'Motion systems',
-        description: 'A small motion study from the playground archive.',
+        title: 'Animated landing page intro.',
+        titleRo: 'Intro animat pentru landing page.',
+        description: 'This was an actual landing page for one of the BlackRock companies. They wanted to make use of the video behind it, so I animated the header and demo dashboard to build the landing page nicely.',
+        descriptionRo: 'A fost un landing page real pentru una dintre companiile BlackRock. Voiau să folosească video-ul din fundal, așa că am animat headerul și dashboardul demo ca să construiesc mai natural pagina.',
         type: 'video',
         src: '/media/playground/6.webm',
     },
     'interaction-study': {
-        title: 'Interaction study',
-        description: 'A vertical prototype pass exploring timing, interface response, and interface feel.',
+        title: 'macOS app for my Govee lights',
+        titleRo: 'Aplicație macOS pentru luminile mele Govee',
+        description: 'Govee does not have a macOS app to control their lights, so I designed and built one tailored to my needs, with functionality for both LAN and Cloud using the Govee API.',
+        descriptionRo: 'Govee nu are o aplicație macOS pentru controlul luminilor, așa că am designuit și construit una adaptată nevoilor mele, cu funcționalitate atât prin LAN, cât și prin Cloud, folosind API-ul Govee.',
         type: 'video',
         src: '/media/playground/govee.webm',
     },
     'visual-direction': {
-        title: 'Visual direction',
-        description: 'A static visual direction fragment from the playground archive.',
+        title: 'Coffee shop branding',
+        titleRo: 'Branding pentru coffee shop',
+        description: 'I do not really do branding, but this one was for a friend, and I liked the outcome.',
+        descriptionRo: 'Nu prea fac branding, dar acesta a fost pentru un prieten și mi-a plăcut direcția în care a ieșit.',
         type: 'image',
         src: '/media/playground/pungicafea-az.jpg',
         alt: 'Two bags of coffee on an espresso machine.',
     },
     'hero-prototype': {
-        title: 'Hero prototype',
-        description: 'A wide hero prototype exploring background motion and editorial pacing.',
+        title: 'Projects with testimonials',
+        titleRo: 'Proiecte cu testimoniale',
+        description: 'Had a lot of fun with this one. The idea was to build a project portfolio with testimonials. On hover, the background shows the featured video, the view project button behaves like a blob with GSAP, and the testimonials work like a WhatsApp-style conversation.',
+        descriptionRo: 'M-am distrat destul de mult cu explorarea asta. Ideea era să construiesc un portofoliu de proiecte cu testimoniale. La hover, fundalul arată video-ul proiectului, butonul de view project se comportă ca un blob construit cu GSAP, iar testimonialele funcționează ca o conversație în stil WhatsApp.',
         type: 'video',
         src: '/media/playground/portfolio-background-hero-testimonials.webm',
     },
     'app-flow': {
-        title: 'App flow',
-        description: 'A product flow fragment from a mobile interface prototype.',
+        title: 'Logo animation',
+        titleRo: 'Animație de logo',
+        description: 'Played around with logo animations.',
+        descriptionRo: 'O explorare rapidă cu animații de logo.',
         type: 'video',
         src: '/media/playground/5.webm',
     },
     'ui-exploration': {
-        title: 'UI exploration',
-        description: 'A small comparison study around visual language and interface assets.',
+        title: 'Visual exploration',
+        titleRo: 'Explorare vizuală',
+        description: 'This is actual client work. I was showing the difference between using icons and animations to convey meaning, but the client did not have the budget necessary for it.',
+        descriptionRo: 'Aici este muncă reală pentru client. Arătam diferența dintre folosirea iconurilor și a animațiilor pentru a transmite sens, dar clientul nu avea bugetul necesar pentru direcția asta.',
         type: 'image',
         src: '/media/playground/illustrationvsicon.jpg',
         alt: 'Side by side screens comparing illustrations vs icons.',
     },
     'prototype-pass': {
-        title: 'Prototype pass',
-        description: 'A product prototype pass focused on rhythm and interaction states.',
+        title: 'Shader interactive footer',
+        titleRo: 'Footer interactiv cu shader',
+        description: 'I was experimenting with one of the designs for my footers. Designed in Figma and built with GSAP and Unicorn Studio for the glitch text shader animation.',
+        descriptionRo: 'Experimentam cu una dintre direcțiile de footer. Design în Figma, apoi construit cu GSAP și Unicorn Studio pentru animația glitch pe text.',
         type: 'video',
         src: '/media/playground/screen-recording-2025-05-23-11-41-42.webm',
     },
     'mobile-detail': {
-        title: 'Mobile detail',
-        description: 'A vertical mobile detail interaction from the playground archive.',
+        title: 'Card animation',
+        titleRo: 'Animație de card',
+        description: 'Did this animation in Jitter to show the client how we might animate charts like these.',
+        descriptionRo: 'Am făcut animația în Jitter ca să-i arăt clientului cum am putea anima grafice de genul acesta.',
         type: 'video',
         src: '/media/playground/4.webm',
     },
     'identity-study': {
         title: 'Identity study',
-        description: 'A static identity direction fragment from the playground archive.',
+        titleRo: 'Studiu de identitate',
+        description: 'Played around in Photoshop to test an announcement banner.',
+        descriptionRo: 'M-am jucat în Photoshop ca să testez un banner de anunț.',
         type: 'image',
         src: '/media/playground/furtuna0525.webp',
         alt: 'Man walking by a billboard.',
     },
     'system-prototype': {
-        title: 'System prototype',
-        description: 'A systems prototype exploring structure and interface behavior.',
+        title: 'Portfolio showcase section.',
+        titleRo: 'Secțiune de prezentare pentru portofoliu.',
+        description: 'Built a portfolio showcase section with a video background. Designed in Figma and built with Codex for static HTML and as a Framer component.',
+        descriptionRo: 'Am construit o secțiune de showcase pentru portofoliu, cu video în fundal. Designul a fost făcut în Figma, apoi construit cu Codex pentru static HTML și ca componentă Framer.',
         type: 'video',
         src: '/media/playground/screen-recording-2026-02-09-13-32-35.webm',
     },
     'flow-fragment': {
-        title: 'Flow fragment',
-        description: 'A compact flow fragment from a product prototype.',
+        title: 'Glitch navigation',
+        titleRo: 'Navigație glitch',
+        description: 'Early exploration for https://furtune.design/. Done with Figma, Jitter, and Unicorn Studio.',
+        descriptionRo: 'Explorare timpurie pentru https://furtune.design/. Făcută cu Figma, Jitter și Unicorn Studio.',
         type: 'video',
         src: '/media/playground/screen-recording-2025-10-27-13-16-16.webm',
     },
@@ -1749,6 +1771,15 @@ let playgroundDetailTransitionScrollTop = 0;
 function getPlaygroundDetailItem() {
     const params = new URLSearchParams(window.location.search);
     return playgroundItems[params.get('item')] || playgroundItems['motion-systems'];
+}
+
+function getPlaygroundDetailCopy(item) {
+    const isRomanian = document.documentElement.lang === 'ro' || window.location.pathname.startsWith('/playground/');
+
+    return {
+        title: isRomanian ? item.titleRo || item.title : item.title,
+        description: isRomanian ? item.descriptionRo || item.description : item.description,
+    };
 }
 
 function createPlaygroundDetailMedia(item) {
@@ -1773,12 +1804,13 @@ function createPlaygroundDetailMedia(item) {
 
 function populatePlaygroundDetail(container = document, options = {}) {
     const item = playgroundDetailTransitionItem || getPlaygroundDetailItem();
+    const copy = getPlaygroundDetailCopy(item);
     const title = container.querySelector('[data-playground-detail-title]');
     const description = container.querySelector('[data-playground-detail-description]');
     const mediaShell = container.querySelector('[data-playground-detail-media]');
 
-    if (title) title.textContent = item.title;
-    if (description) description.textContent = item.description;
+    if (title) title.textContent = copy.title;
+    if (description) description.textContent = copy.description;
 
     if (!options.skipMedia && mediaShell && !mediaShell.querySelector('img, video')) {
         mediaShell.appendChild(createPlaygroundDetailMedia(item));
@@ -1836,6 +1868,28 @@ function getMediaAspectRatio(media) {
 
     if (media.tagName === 'IMG' && media.naturalWidth && media.naturalHeight) {
         return `${media.naturalWidth} / ${media.naturalHeight}`;
+    }
+
+    return null;
+}
+
+function getMediaAspectRatioValue(media) {
+    if (!media) return null;
+
+    const link = media.closest('[data-playground-detail-link]');
+    const cssRatio = link ? getComputedStyle(link).getPropertyValue('--ar').trim() : '';
+    const cssRatioParts = cssRatio.split('/').map(part => Number(part.trim()));
+
+    if (cssRatioParts.length === 2 && cssRatioParts.every(Boolean)) {
+        return cssRatioParts[0] / cssRatioParts[1];
+    }
+
+    if (media.tagName === 'VIDEO' && media.videoWidth && media.videoHeight) {
+        return media.videoWidth / media.videoHeight;
+    }
+
+    if (media.tagName === 'IMG' && media.naturalWidth && media.naturalHeight) {
+        return media.naturalWidth / media.naturalHeight;
     }
 
     return null;
@@ -1938,10 +1992,21 @@ async function playgroundDetailTransitionEnter(data) {
 
     mediaShell.innerHTML = '';
     const mediaAspectRatio = getMediaAspectRatio(media);
+    const mediaAspectRatioValue = getMediaAspectRatioValue(media);
     if (mediaAspectRatio) {
         mediaShell.style.aspectRatio = mediaAspectRatio;
         mediaShell.style.height = 'auto';
         mediaShell.style.minHeight = '0';
+
+        if (mediaAspectRatioValue && mediaAspectRatioValue < 1) {
+            mediaShell.style.width = `min(100%, calc((100vh - 13rem) * ${mediaAspectRatioValue}))`;
+            mediaShell.style.marginLeft = 'auto';
+            mediaShell.style.marginRight = 'auto';
+        } else {
+            mediaShell.style.width = '';
+            mediaShell.style.marginLeft = '';
+            mediaShell.style.marginRight = '';
+        }
     }
     media.classList.add('playground-detail-media');
     mediaShell.appendChild(media);

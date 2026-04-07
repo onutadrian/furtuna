@@ -4188,7 +4188,7 @@ footer ._logo {
 
 .playground .playground-webgl-item--media {
   aspect-ratio: var(--ar, 16/9);
-  overflow: hidden;
+  overflow: visible;
   color: inherit;
   cursor: pointer;
   text-decoration: none;
@@ -4307,11 +4307,13 @@ footer ._logo {
   min-height: 36rem;
   overflow: hidden;
   background: #f3f3f3;
+  max-height: calc(100vh - 13rem);
 }
 @media screen and (max-width: 1024px) {
   .playground-detail-media-shell {
     height: auto;
     min-height: 0;
+    max-height: none;
     aspect-ratio: 4/5;
   }
 }
