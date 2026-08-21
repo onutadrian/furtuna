@@ -859,6 +859,17 @@ function caseStudyProgressBar(container = document) {
 }
 
 function caseStudyAnimations(container = document) {
+    if (!container || container.dataset.caseStudyAnimationsInitialized === `true`) {
+        return;
+    }
+    container.dataset.caseStudyAnimationsInitialized = `true`;
+
+    function markCaseStudySplitElement(element) {
+        if (!element) return false;
+        if (element.dataset.caseStudySplitInitialized === `true`) return false;
+        element.dataset.caseStudySplitInitialized = `true`;
+        return true;
+    }
 
     let txtMainElements = container.querySelectorAll(".cs-txt-main-left, .cs-txt-main-right");
 
@@ -867,6 +878,9 @@ function caseStudyAnimations(container = document) {
         Array.from(txtMainElements).forEach(txtMainElement => {
             let preHeadingParagraph = txtMainElement.querySelectorAll("._pre-heading p")[0]
             let headingParagraph = txtMainElement.querySelectorAll("._heading p")
+
+            if (!markCaseStudySplitElement(preHeadingParagraph)) return;
+            Array.from(headingParagraph).forEach(markCaseStudySplitElement);
 
             let split = SplitText.create(headingParagraph, {
                 type: "lines"
@@ -928,6 +942,8 @@ function caseStudyAnimations(container = document) {
             if (!descriptionParagraphs) return;
 
             Array.from(descriptionParagraphs).forEach(descriptionParagraph => {
+                if (!markCaseStudySplitElement(descriptionParagraph)) return;
+
                 let split = SplitText.create(descriptionParagraph, {
                     type: "lines"
                 });
@@ -979,6 +995,8 @@ function caseStudyAnimations(container = document) {
             if (!descriptionParagraphs) return;
 
             Array.from(descriptionParagraphs).forEach(descriptionParagraph => {
+                if (!markCaseStudySplitElement(descriptionParagraph)) return;
+
                 let split = SplitText.create(descriptionParagraph, {
                     type: "lines"
                 });
@@ -1029,6 +1047,8 @@ function caseStudyAnimations(container = document) {
             if (!descriptionParagraphs) return;
 
             Array.from(descriptionParagraphs).forEach(descriptionParagraph => {
+                if (!markCaseStudySplitElement(descriptionParagraph)) return;
+
                 let split = SplitText.create(descriptionParagraph, {
                     type: "lines"
                 });
@@ -1080,6 +1100,8 @@ function caseStudyAnimations(container = document) {
             if (!descriptionParagraphs) return;
 
             Array.from(descriptionParagraphs).forEach(descriptionParagraph => {
+                if (!markCaseStudySplitElement(descriptionParagraph)) return;
+
                 let split = SplitText.create(descriptionParagraph, {
                     type: "lines"
                 });
@@ -1131,6 +1153,8 @@ function caseStudyAnimations(container = document) {
             if (!descriptionParagraphs) return;
 
             Array.from(descriptionParagraphs).forEach(descriptionParagraph => {
+                if (!markCaseStudySplitElement(descriptionParagraph)) return;
+
                 let split = SplitText.create(descriptionParagraph, {
                     type: "lines"
                 });

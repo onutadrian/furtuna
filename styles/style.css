@@ -703,6 +703,22 @@
   align-items: end;
 }
 
+.cs-fig-1x1-onboarding ._content ._images {
+  align-items: stretch;
+}
+.cs-fig-1x1-onboarding ._content ._images ._wrapper {
+  display: flex;
+  aspect-ratio: 903/1140;
+}
+.cs-fig-1x1-onboarding ._content ._images ._wrapper img,
+.cs-fig-1x1-onboarding ._content ._images ._wrapper video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
 .cs-fig-1x1-asym-left {
   margin-bottom: 10rem;
   grid-column: 1/19;
